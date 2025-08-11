@@ -3,44 +3,80 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 56;
+	objectVersion = 77;
 	objects = {
 
-/* Begin PBXBuildFile section */
-		A1234567890123456789012A /* MyMacroPalApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1234567890123456789012B /* MyMacroPalApp.swift */; };
-		A1234567890123456789012C /* PersistenceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1234567890123456789012D /* PersistenceController.swift */; };
-		A1234567890123456789012E /* USDAService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1234567890123456789012F /* USDAService.swift */; };
-		A1234567890123456789013A /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1234567890123456789013B /* Models.swift */; };
-		A1234567890123456789013C /* ViewModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1234567890123456789013D /* ViewModels.swift */; };
-		A1234567890123456789013E /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1234567890123456789013F /* HomeView.swift */; };
-		A1234567890123456789014A /* AddFoodView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1234567890123456789014B /* AddFoodView.swift */; };
-		A1234567890123456789014C /* FoodDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1234567890123456789014D /* FoodDetailView.swift */; };
-		A1234567890123456789014E /* HistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1234567890123456789014F /* HistoryView.swift */; };
-		A1234567890123456789015A /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1234567890123456789015B /* SettingsView.swift */; };
-		A1234567890123456789015C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A1234567890123456789015D /* Assets.xcassets */; };
-		A1234567890123456789015E /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A1234567890123456789015F /* Preview Assets.xcassets */; };
-		A1234567890123456789016A /* MyMacroPalModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = A1234567890123456789016B /* MyMacroPalModel.xcdatamodeld */; };
-/* End PBXBuildFile section */
+/* Begin PBXContainerItemProxy section */
+		93A6C6792E48365400111DC4 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 93A6C65B2E48365200111DC4 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 93A6C6622E48365200111DC4;
+			remoteInfo = MyMacroPal;
+		};
+		93A6C6832E48365400111DC4 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 93A6C65B2E48365200111DC4 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 93A6C6622E48365200111DC4;
+			remoteInfo = MyMacroPal;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		A1234567890123456789012A /* MyMacroPal.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MyMacroPal.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		A1234567890123456789012B /* MyMacroPalApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyMacroPalApp.swift; sourceTree = "<group>"; };
-		A1234567890123456789012D /* PersistenceController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistenceController.swift; sourceTree = "<group>"; };
-		A1234567890123456789012F /* USDAService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = USDAService.swift; sourceTree = "<group>"; };
-		A1234567890123456789013B /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
-		A1234567890123456789013D /* ViewModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModels.swift; sourceTree = "<group>"; };
-		A1234567890123456789013F /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
-		A1234567890123456789014B /* AddFoodView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddFoodView.swift; sourceTree = "<group>"; };
-		A1234567890123456789014D /* FoodDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodDetailView.swift; sourceTree = "<group>"; };
-		A1234567890123456789014F /* HistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryView.swift; sourceTree = "<group>"; };
-		A1234567890123456789015B /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
-		A1234567890123456789015D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		A1234567890123456789015F /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
-		A1234567890123456789016B /* MyMacroPalModel.xcdatamodeld */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = MyMacroPalModel.xcdatamodeld; sourceTree = "<group>"; };
+		93A6C6632E48365200111DC4 /* MyMacroPal.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MyMacroPal.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		93A6C6782E48365400111DC4 /* MyMacroPalTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MyMacroPalTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		93A6C6822E48365400111DC4 /* MyMacroPalUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MyMacroPalUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		93C0F0C12E5A000000000002 /* AppConfig.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = AppConfig.xcconfig; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		93BB30922E4876C1000C4923 /* Exceptions for "MyMacroPal" folder in "MyMacroPal" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 93A6C6622E48365200111DC4 /* MyMacroPal */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		93A6C6652E48365200111DC4 /* MyMacroPal */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				93BB30922E4876C1000C4923 /* Exceptions for "MyMacroPal" folder in "MyMacroPal" target */,
+			);
+			path = MyMacroPal;
+			sourceTree = "<group>";
+		};
+		93A6C67B2E48365400111DC4 /* MyMacroPalTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = MyMacroPalTests;
+			sourceTree = "<group>";
+		};
+		93A6C6852E48365400111DC4 /* MyMacroPalUITests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = MyMacroPalUITests;
+			sourceTree = "<group>";
+		};
+/* End PBXFileSystemSynchronizedRootGroup section */
+
 /* Begin PBXFrameworksBuildPhase section */
-		A1234567890123456789012G /* Frameworks */ = {
+		93A6C6602E48365200111DC4 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		93A6C6752E48365400111DC4 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		93A6C67F2E48365400111DC4 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -50,138 +86,213 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		A1234567890123456789012H /* MyMacroPal */ = {
+		93A6C65A2E48365200111DC4 = {
 			isa = PBXGroup;
 			children = (
-				A1234567890123456789012B /* MyMacroPalApp.swift */,
-				A1234567890123456789012D /* PersistenceController.swift */,
-				A1234567890123456789012F /* USDAService.swift */,
-				A1234567890123456789013B /* Models.swift */,
-				A1234567890123456789013D /* ViewModels.swift */,
-				A1234567890123456789013F /* HomeView.swift */,
-				A1234567890123456789014B /* AddFoodView.swift */,
-				A1234567890123456789014D /* FoodDetailView.swift */,
-				A1234567890123456789014F /* HistoryView.swift */,
-				A1234567890123456789015B /* SettingsView.swift */,
-				A1234567890123456789015D /* Assets.xcassets */,
-				A1234567890123456789016B /* MyMacroPalModel.xcdatamodeld */,
+				93A6C6652E48365200111DC4 /* MyMacroPal */,
+				93A6C67B2E48365400111DC4 /* MyMacroPalTests */,
+				93A6C6852E48365400111DC4 /* MyMacroPalUITests */,
+				93C0F0C02E5A000000000001 /* Config */,
+				93A6C6642E48365200111DC4 /* Products */,
 			);
-			path = MyMacroPal;
 			sourceTree = "<group>";
 		};
-		A1234567890123456789013G /* Products */ = {
+		93A6C6642E48365200111DC4 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				A1234567890123456789012A /* MyMacroPal.app */,
+				93A6C6632E48365200111DC4 /* MyMacroPal.app */,
+				93A6C6782E48365400111DC4 /* MyMacroPalTests.xctest */,
+				93A6C6822E48365400111DC4 /* MyMacroPalUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		A1234567890123456789013H /* Preview Content */ = {
+		93C0F0C02E5A000000000001 /* Config */ = {
 			isa = PBXGroup;
 			children = (
-				A1234567890123456789015F /* Preview Assets.xcassets */,
+				93C0F0C12E5A000000000002 /* AppConfig.xcconfig */,
 			);
-			path = "Preview Content";
-			sourceTree = "<group>";
-		};
-		A1234567890123456789012I = {
-			isa = PBXGroup;
-			children = (
-				A1234567890123456789012H /* MyMacroPal */,
-				A1234567890123456789013H /* Preview Content */,
-				A1234567890123456789013G /* Products */,
-			);
+			path = Config;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		A1234567890123456789012J /* MyMacroPal */ = {
+		93A6C6622E48365200111DC4 /* MyMacroPal */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = A1234567890123456789012K /* Build configuration list for PBXNativeTarget "MyMacroPal" */;
+			buildConfigurationList = 93A6C68C2E48365400111DC4 /* Build configuration list for PBXNativeTarget "MyMacroPal" */;
 			buildPhases = (
-				A1234567890123456789012L /* Sources */,
-				A1234567890123456789012G /* Frameworks */,
-				A1234567890123456789012M /* Resources */,
+				93A6C65F2E48365200111DC4 /* Sources */,
+				93A6C6602E48365200111DC4 /* Frameworks */,
+				93A6C6612E48365200111DC4 /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
+			fileSystemSynchronizedGroups = (
+				93A6C6652E48365200111DC4 /* MyMacroPal */,
+			);
 			name = MyMacroPal;
+			packageProductDependencies = (
+			);
 			productName = MyMacroPal;
-			productReference = A1234567890123456789012A /* MyMacroPal.app */;
+			productReference = 93A6C6632E48365200111DC4 /* MyMacroPal.app */;
 			productType = "com.apple.product-type.application";
+		};
+		93A6C6772E48365400111DC4 /* MyMacroPalTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 93A6C68F2E48365400111DC4 /* Build configuration list for PBXNativeTarget "MyMacroPalTests" */;
+			buildPhases = (
+				93A6C6742E48365400111DC4 /* Sources */,
+				93A6C6752E48365400111DC4 /* Frameworks */,
+				93A6C6762E48365400111DC4 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				93A6C67A2E48365400111DC4 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				93A6C67B2E48365400111DC4 /* MyMacroPalTests */,
+			);
+			name = MyMacroPalTests;
+			packageProductDependencies = (
+			);
+			productName = MyMacroPalTests;
+			productReference = 93A6C6782E48365400111DC4 /* MyMacroPalTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		93A6C6812E48365400111DC4 /* MyMacroPalUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 93A6C6922E48365400111DC4 /* Build configuration list for PBXNativeTarget "MyMacroPalUITests" */;
+			buildPhases = (
+				93A6C67E2E48365400111DC4 /* Sources */,
+				93A6C67F2E48365400111DC4 /* Frameworks */,
+				93A6C6802E48365400111DC4 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				93A6C6842E48365400111DC4 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				93A6C6852E48365400111DC4 /* MyMacroPalUITests */,
+			);
+			name = MyMacroPalUITests;
+			packageProductDependencies = (
+			);
+			productName = MyMacroPalUITests;
+			productReference = 93A6C6822E48365400111DC4 /* MyMacroPalUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
 		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
-		A1234567890123456789012N /* Project object */ = {
+		93A6C65B2E48365200111DC4 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 1500;
-				LastUpgradeCheck = 1500;
+				LastSwiftUpdateCheck = 1620;
+				LastUpgradeCheck = 1620;
 				TargetAttributes = {
-					A1234567890123456789012J = {
-						CreatedOnToolsVersion = 15.0;
+					93A6C6622E48365200111DC4 = {
+						CreatedOnToolsVersion = 16.2;
+					};
+					93A6C6772E48365400111DC4 = {
+						CreatedOnToolsVersion = 16.2;
+						TestTargetID = 93A6C6622E48365200111DC4;
+					};
+					93A6C6812E48365400111DC4 = {
+						CreatedOnToolsVersion = 16.2;
+						TestTargetID = 93A6C6622E48365200111DC4;
 					};
 				};
 			};
-			buildConfigurationList = A1234567890123456789012O /* Build configuration list for PBXProject "MyMacroPal" */;
-			compatibilityVersion = "Xcode 14.0";
+			buildConfigurationList = 93A6C65E2E48365200111DC4 /* Build configuration list for PBXProject "MyMacroPal" */;
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
 				Base,
 			);
-			mainGroup = A1234567890123456789012I;
-			productRefGroup = A1234567890123456789013G /* Products */;
+			mainGroup = 93A6C65A2E48365200111DC4;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 93A6C6642E48365200111DC4 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				A1234567890123456789012J /* MyMacroPal */,
+				93A6C6622E48365200111DC4 /* MyMacroPal */,
+				93A6C6772E48365400111DC4 /* MyMacroPalTests */,
+				93A6C6812E48365400111DC4 /* MyMacroPalUITests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		A1234567890123456789012M /* Resources */ = {
+		93A6C6612E48365200111DC4 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A1234567890123456789015E /* Preview Assets.xcassets in Resources */,
-				A1234567890123456789015C /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		93A6C6762E48365400111DC4 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		93A6C6802E48365400111DC4 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		A1234567890123456789012L /* Sources */ = {
+		93A6C65F2E48365200111DC4 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A1234567890123456789012A /* MyMacroPalApp.swift in Sources */,
-				A1234567890123456789012C /* PersistenceController.swift in Sources */,
-				A1234567890123456789012E /* USDAService.swift in Sources */,
-				A1234567890123456789013A /* Models.swift in Sources */,
-				A1234567890123456789013C /* ViewModels.swift in Sources */,
-				A1234567890123456789013E /* HomeView.swift in Sources */,
-				A1234567890123456789014A /* AddFoodView.swift in Sources */,
-				A1234567890123456789014C /* FoodDetailView.swift in Sources */,
-				A1234567890123456789014E /* HistoryView.swift in Sources */,
-				A1234567890123456789015A /* SettingsView.swift in Sources */,
-				A1234567890123456789016A /* MyMacroPalModel.xcdatamodeld in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		93A6C6742E48365400111DC4 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		93A6C67E2E48365400111DC4 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		93A6C67A2E48365400111DC4 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 93A6C6622E48365200111DC4 /* MyMacroPal */;
+			targetProxy = 93A6C6792E48365400111DC4 /* PBXContainerItemProxy */;
+		};
+		93A6C6842E48365400111DC4 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 93A6C6622E48365200111DC4 /* MyMacroPal */;
+			targetProxy = 93A6C6832E48365400111DC4 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin XCBuildConfiguration section */
-		A1234567890123456789012P /* Debug */ = {
+		93A6C68A2E48365400111DC4 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -233,7 +344,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
@@ -244,7 +355,7 @@
 			};
 			name = Debug;
 		};
-		A1234567890123456789012Q /* Release */ = {
+		93A6C68B2E48365400111DC4 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -290,7 +401,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
@@ -300,8 +411,9 @@
 			};
 			name = Release;
 		};
-		A1234567890123456789012R /* Debug */ = {
+		93A6C68D2E48365400111DC4 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 93C0F0C12E5A000000000002 /* AppConfig.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -310,6 +422,7 @@
 				DEVELOPMENT_ASSET_PATHS = "\"MyMacroPal/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = MyMacroPal/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -320,7 +433,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.example.MyMacroPal;
+				PRODUCT_BUNDLE_IDENTIFIER = AVIDWareAthletics.MyMacroPal;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -328,8 +441,9 @@
 			};
 			name = Debug;
 		};
-		A1234567890123456789012S /* Release */ = {
+		93A6C68E2E48365400111DC4 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 93C0F0C12E5A000000000002 /* AppConfig.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -338,6 +452,7 @@
 				DEVELOPMENT_ASSET_PATHS = "\"MyMacroPal/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = MyMacroPal/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -348,7 +463,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.example.MyMacroPal;
+				PRODUCT_BUNDLE_IDENTIFIER = AVIDWareAthletics.MyMacroPal;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -356,41 +471,114 @@
 			};
 			name = Release;
 		};
+		93A6C6902E48365400111DC4 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = AVIDWareAthletics.MyMacroPalTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MyMacroPal.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/MyMacroPal";
+			};
+			name = Debug;
+		};
+		93A6C6912E48365400111DC4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = AVIDWareAthletics.MyMacroPalTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MyMacroPal.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/MyMacroPal";
+			};
+			name = Release;
+		};
+		93A6C6932E48365400111DC4 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = AVIDWareAthletics.MyMacroPalUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = MyMacroPal;
+			};
+			name = Debug;
+		};
+		93A6C6942E48365400111DC4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = AVIDWareAthletics.MyMacroPalUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = MyMacroPal;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		A1234567890123456789012K /* Build configuration list for PBXNativeTarget "MyMacroPal" */ = {
+		93A6C65E2E48365200111DC4 /* Build configuration list for PBXProject "MyMacroPal" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				A1234567890123456789012R /* Debug */,
-				A1234567890123456789012S /* Release */,
+				93A6C68A2E48365400111DC4 /* Debug */,
+				93A6C68B2E48365400111DC4 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		A1234567890123456789012O /* Build configuration list for PBXProject "MyMacroPal" */ = {
+		93A6C68C2E48365400111DC4 /* Build configuration list for PBXNativeTarget "MyMacroPal" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				A1234567890123456789012P /* Debug */,
-				A1234567890123456789012Q /* Release */,
+				93A6C68D2E48365400111DC4 /* Debug */,
+				93A6C68E2E48365400111DC4 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		93A6C68F2E48365400111DC4 /* Build configuration list for PBXNativeTarget "MyMacroPalTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				93A6C6902E48365400111DC4 /* Debug */,
+				93A6C6912E48365400111DC4 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		93A6C6922E48365400111DC4 /* Build configuration list for PBXNativeTarget "MyMacroPalUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				93A6C6932E48365400111DC4 /* Debug */,
+				93A6C6942E48365400111DC4 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCVersionGroup section */
-		A1234567890123456789016B /* MyMacroPalModel.xcdatamodeld */ = {
-			isa = XCVersionGroup;
-			children = (
-				A1234567890123456789016C /* MyMacroPalModel.xcdatamodel */,
-			);
-			currentVersion = A1234567890123456789016C /* MyMacroPalModel.xcdatamodel */;
-			path = MyMacroPalModel.xcdatamodeld;
-			sourceTree = "<group>";
-			versionGroupType = wrapper.xcdatamodel;
-		};
-/* End XCVersionGroup section */
 	};
-	rootObject = A1234567890123456789012N /* Project object */;
+	rootObject = 93A6C65B2E48365200111DC4 /* Project object */;
 }

@@ -26,11 +26,11 @@ final class HomeViewModel: ObservableObject {
 
         do {
             let items = try context.fetch(request)
-            totalCalories = items.reduce(0) { $0 + $1.calories }
-            totalProtein = items.reduce(0) { $0 + $1.protein }
-            totalFat = items.reduce(0) { $0 + $1.fat }
-            totalCarbs = items.reduce(0) { $0 + $1.carbs }
-            totalFiber = items.reduce(0) { $0 + $1.fiber }
+            totalCalories = items.reduce(0) { $0 + $1.calories.sanitizedNonNegativeFinite }.sanitizedNonNegativeFinite
+            totalProtein = items.reduce(0) { $0 + $1.protein.sanitizedNonNegativeFinite }.sanitizedNonNegativeFinite
+            totalFat = items.reduce(0) { $0 + $1.fat.sanitizedNonNegativeFinite }.sanitizedNonNegativeFinite
+            totalCarbs = items.reduce(0) { $0 + $1.carbs.sanitizedNonNegativeFinite }.sanitizedNonNegativeFinite
+            totalFiber = items.reduce(0) { $0 + $1.fiber.sanitizedNonNegativeFinite }.sanitizedNonNegativeFinite
         } catch {
             print("Fetch error: \(error)")
         }
@@ -42,6 +42,7 @@ final class AddFoodViewModel: ObservableObject {
     @Published var query = ""
     @Published var results: [USDAFood] = []
     @Published var isLoading = false
+    @Published var errorMessage: String? = nil
 
     private let service = USDAService()
     private var searchTask: Task<Void, Never>?
@@ -49,6 +50,7 @@ final class AddFoodViewModel: ObservableObject {
     func search(_ query: String) {
         searchTask?.cancel()
         self.query = query
+        self.errorMessage = nil
         
         if query.trimmingCharacters(in: .whitespaces).isEmpty {
             results = []
@@ -70,12 +72,17 @@ final class AddFoodViewModel: ObservableObject {
             await MainActor.run {
                 self.results = results
                 self.isLoading = false
+                self.errorMessage = nil
             }
         } catch {
             await MainActor.run {
                 self.results = []
                 self.isLoading = false
-                print("Search error: \(error)")
+                if let usdaError = error as? USDAServiceError {
+                    self.errorMessage = usdaError.localizedDescription
+                } else {
+                    self.errorMessage = error.localizedDescription
+                }
             }
         }
     }
@@ -103,23 +110,23 @@ final class FoodDetailViewModel: ObservableObject {
             if let nutrient = nutrients.first(where: { 
                 $0.nutrientName.lowercased().contains(name.lowercased()) 
             }) {
-                return nutrient.value ?? 0
+                return (nutrient.value ?? 0).sanitizedNonNegativeFinite
             }
             return 0
         }
 
         // USDA values are typically per 100g
-        let per100cal = nutrientValue("energy")
-        let per100p = nutrientValue("protein")
-        let per100f = nutrientValue("total lipid")
-        let per100c = nutrientValue("carbohydrate")
-        let per100fi = nutrientValue("fiber")
+        let per100cal = nutrientValue("energy").sanitizedNonNegativeFinite
+        let per100p = nutrientValue("protein").sanitizedNonNegativeFinite
+        let per100f = nutrientValue("total lipid").sanitizedNonNegativeFinite
+        let per100c = nutrientValue("carbohydrate").sanitizedNonNegativeFinite
+        let per100fi = nutrientValue("fiber").sanitizedNonNegativeFinite
 
-        let factor = grams / 100.0
-        calculatedCalories = per100cal * factor
-        calculatedProtein = per100p * factor
-        calculatedFat = per100f * factor
-        calculatedCarbs = per100c * factor
-        calculatedFiber = per100fi * factor
+        let factor = (grams.isFinite ? grams : 0) / 100.0
+        calculatedCalories = (per100cal * factor).sanitizedNonNegativeFinite
+        calculatedProtein = (per100p * factor).sanitizedNonNegativeFinite
+        calculatedFat = (per100f * factor).sanitizedNonNegativeFinite
+        calculatedCarbs = (per100c * factor).sanitizedNonNegativeFinite
+        calculatedFiber = (per100fi * factor).sanitizedNonNegativeFinite
     }
 }

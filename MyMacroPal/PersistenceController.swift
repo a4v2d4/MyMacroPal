@@ -6,7 +6,7 @@ final class PersistenceController {
     let container: NSPersistentContainer
 
     init(inMemory: Bool = false) {
-        container = NSPersistentContainer(name: "MyMacroPalModel")
+        container = NSPersistentContainer(name: "MyMacroPal")
         if inMemory {
             container.persistentStoreDescriptions.first?.url = URL(fileURLWithPath: "/dev/null")
         }
@@ -17,4 +17,11 @@ final class PersistenceController {
         }
         container.viewContext.automaticallyMergesChangesFromParent = true
     }
+    
+    static var preview: PersistenceController = {
+        let result = PersistenceController(inMemory: true)
+        let viewContext = result.container.viewContext
+        // Add some sample data for previews if needed
+        return result
+    }()
 }

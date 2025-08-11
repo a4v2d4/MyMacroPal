@@ -135,6 +135,8 @@ struct MacroGoalRow: View {
             
             TextField("0", value: $value, formatter: NumberFormatter())
                 .keyboardType(.decimalPad)
+                .autocorrectionDisabled(true)
+                .textInputAutocapitalization(.never)
                 .multilineTextAlignment(.trailing)
                 .frame(width: 80)
                 .textFieldStyle(.roundedBorder)

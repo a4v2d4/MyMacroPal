@@ -5,9 +5,17 @@ struct HomeView: View {
     @Environment(\.managedObjectContext) private var viewContext
     @StateObject private var viewModel: HomeViewModel
     @State private var showAddFood = false
+    @FetchRequest private var todayEntries: FetchedResults<FoodEntryEntity>
 
     init() {
         _viewModel = StateObject(wrappedValue: HomeViewModel(context: PersistenceController.shared.container.viewContext))
+        let start = Calendar.current.startOfDay(for: Date())
+        let end = Calendar.current.date(byAdding: .day, value: 1, to: start)!
+        _todayEntries = FetchRequest(
+            entity: FoodEntryEntity.entity(),
+            sortDescriptors: [NSSortDescriptor(keyPath: \FoodEntryEntity.date, ascending: true)],
+            predicate: NSPredicate(format: "date >= %@ AND date < %@", start as NSDate, end as NSDate)
+        )
     }
 
     var body: some View {
@@ -63,7 +71,18 @@ struct HomeView: View {
                 }
                 .padding(.horizontal)
 
-                Spacer()
+                // Today's foods list (like history day view)
+                List {
+                    Section("Today's Foods") {
+                        if todayEntries.isEmpty {
+                            Text("No food items yet").foregroundColor(.secondary).italic()
+                        }
+                        ForEach(todayEntries, id: \.id) { entry in
+                            EditableFoodEntryRow(entry: entry)
+                        }
+                        .onDelete(perform: deleteItems)
+                    }
+                }
 
                 // Action buttons
                 VStack(spacing: 12) {
@@ -113,11 +132,21 @@ struct HomeView: View {
             }
             .navigationTitle("MyMacroPal")
             .navigationBarTitleDisplayMode(.large)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button(action: { showAddFood = true }) {
+                        Image(systemName: "plus")
+                    }
+                }
+            }
             .sheet(isPresented: $showAddFood) {
-                AddFoodView()
+                AddFoodView(targetDate: Calendar.current.startOfDay(for: Date()))
                     .environment(\.managedObjectContext, viewContext)
             }
             .onAppear {
+                viewModel.calculateTotalsForToday()
+            }
+            .onChange(of: todayEntries.count) { _ in
                 viewModel.calculateTotalsForToday()
             }
         }
@@ -130,6 +159,14 @@ struct HomeView: View {
     }
 }
 
+extension HomeView {
+    private func deleteItems(at offsets: IndexSet) {
+        for index in offsets { viewContext.delete(todayEntries[index]) }
+        do { try viewContext.save() } catch { print("Delete error: \(error)") }
+        viewModel.calculateTotalsForToday()
+    }
+}
+
 struct MacroRow: View {
     let label: String
     let value: Double
@@ -137,8 +174,11 @@ struct MacroRow: View {
     let color: Color
 
     private var progress: Double {
-        guard goal > 0 else { return 0 }
-        return min(value / goal, 1.0)
+        let safeGoal = goal.sanitizedNonNegativeFinite
+        guard safeGoal > 0 else { return 0 }
+        let ratio = (value.sanitizedNonNegativeFinite) / safeGoal
+        if ratio.isNaN || !ratio.isFinite { return 0 }
+        return min(max(ratio, 0), 1.0)
     }
 
     var body: some View {
@@ -148,7 +188,7 @@ struct MacroRow: View {
                     .font(.headline)
                     .foregroundColor(.primary)
                 Spacer()
-                Text("\(Int(value))/\(Int(goal))")
+                Text("\(Int(value.sanitizedNonNegativeFinite))/\(Int(goal.sanitizedNonNegativeFinite))")
                     .font(.subheadline)
                     .foregroundColor(.secondary)
             }

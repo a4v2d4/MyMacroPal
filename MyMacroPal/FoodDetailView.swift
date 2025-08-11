@@ -5,6 +5,7 @@ struct FoodDetailView: View {
     @ObservedObject var viewModel: FoodDetailViewModel
     @Environment(\.managedObjectContext) private var viewContext
     @Environment(\.dismiss) private var dismiss
+    var targetDate: Date? = nil
 
     var body: some View {
         NavigationView {
@@ -33,6 +34,8 @@ struct FoodDetailView: View {
                         HStack {
                             TextField("100", value: $viewModel.chosenGrams, formatter: NumberFormatter())
                                 .keyboardType(.decimalPad)
+                                .autocorrectionDisabled(true)
+                                .textInputAutocapitalization(.never)
                                 .textFieldStyle(.roundedBorder)
                                 .frame(width: 100)
                                 .onChange(of: viewModel.chosenGrams) { newValue in
@@ -51,8 +54,9 @@ struct FoodDetailView: View {
                                         if let unitName = portion.measureUnitName,
                                            let gramWeight = portion.gramWeight {
                                             Button("\(unitName) (\(Int(gramWeight))g)") {
-                                                viewModel.chosenGrams = gramWeight
-                                                viewModel.calculate(for: gramWeight)
+                                                let safeWeight = max(0, (gramWeight.isFinite ? gramWeight : 0))
+                                                viewModel.chosenGrams = safeWeight
+                                                viewModel.calculate(for: safeWeight)
                                             }
                                         }
                                     }
@@ -119,7 +123,7 @@ struct FoodDetailView: View {
                     }) {
                         HStack {
                             Image(systemName: "plus.circle.fill")
-                            Text("Add to Today's Log")
+                            Text(targetDate == nil ? "Add to Today's Log" : "Add to Selected Day")
                         }
                         .font(.headline)
                         .foregroundColor(.white)
@@ -156,7 +160,7 @@ struct FoodDetailView: View {
         entry.quantityGrams = viewModel.chosenGrams
         entry.source = "usda"
         entry.fdcId = Int64(viewModel.food.fdcId)
-        entry.date = Date()
+        entry.date = targetDate ?? Date()
 
         do {
             try viewContext.save()

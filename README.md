@@ -58,12 +58,13 @@ A simple, subscription-free iOS app for tracking food macros with USDA FoodData 
 
 ### 2. Configure the App
 
-1. Open `MyMacroPal/USDAService.swift`
-2. Replace `"YOUR_USDA_API_KEY"` with your actual API key:
+Use Info.plist to store your USDA API key (recommended):
 
-   ```swift
-   private let apiKey = "your-actual-api-key-here"
-   ```
+1. In Xcode, select the app target → Info → Custom iOS Target Properties.
+2. Add a new String key named `USDA_API_KEY` and set its value to your API key.
+3. Build and run. The app will read the key from `Info.plist` (or from the `USDA_API_KEY` environment variable when running previews/tests).
+
+If the key is missing, the app will show a readable error under the search bar and no results will be returned.
 
 ### 3. Build and Run
 
@@ -139,7 +140,7 @@ These can be customized in the Settings screen.
 - **Architecture**: MVVM with Combine
 - **Networking**: Async/await with URLSession
 - **Data Persistence**: Core Data with local storage
-- **Search**: Debounced (300ms) USDA API calls
+- **Search**: Debounced (300ms) USDA API calls; API key provided via `X-Api-Key` header
 - **UI**: Native iOS design with custom progress bars
 
 ## Future Enhancements

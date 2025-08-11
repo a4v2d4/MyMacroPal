@@ -1,0 +1,4 @@
+# App-wide configuration. Includes example first, then developer-local secrets if present.
+# The second include overrides values from the first when available.
+#include? "Secrets.example.xcconfig"
+#include? "Secrets.xcconfig"

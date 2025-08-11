@@ -1,3 +1,27 @@
+# Environment variables
 .env
 
+# macOS
 .DS_Store
+
+# Xcode
+Info.plist
+*.xcuserstate
+*.xcuserdatad
+xcuserdata/
+*.moved-aside
+DerivedData/
+*.hmap
+*.ipa
+*.xcuserstate
+project.xcworkspace/xcuserdata/
+
+# XCode secrets
+Config/Secrets.xcconfig
+
+# Core Data
+*.xcdatamodel
+*.xcdatamodeld
+
+# CocoaPods
+Pods/
