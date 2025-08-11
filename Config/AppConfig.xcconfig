@@ -1,4 +1,7 @@
-# App-wide configuration. Includes example first, then developer-local secrets if present.
-# The second include overrides values from the first when available.
+// App-wide configuration. Includes example first, then developer-local secrets if present.
+// The second include overrides values from the first when available.
 #include? "Secrets.example.xcconfig"
 #include? "Secrets.xcconfig"
+
+// Ensure the key is exported into Info.plist via build setting substitution
+INFOPLIST_KEY_USDA_API_KEY = $(USDA_API_KEY)
