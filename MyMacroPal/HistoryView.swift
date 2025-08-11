@@ -54,13 +54,6 @@ struct HistoryView: View {
         }
         .navigationTitle("History")
         .navigationBarTitleDisplayMode(.large)
-        .toolbar {
-            ToolbarItem(placement: .navigationBarTrailing) {
-                Button(action: { showAddFood = true }) {
-                    Image(systemName: "plus")
-                }
-            }
-        }
         .sheet(isPresented: $showAddFood) {
             AddFoodView(targetDate: selectedMode == 0 ? nil : Calendar.current.startOfDay(for: selectedDate))
                 .environment(\.managedObjectContext, viewContext)
@@ -245,12 +238,26 @@ struct DailyLogDetailView: View {
         }
         .navigationTitle(dateString(date))
         .navigationBarTitleDisplayMode(.inline)
-        .toolbar {
-            ToolbarItem(placement: .navigationBarTrailing) {
+        .safeAreaInset(edge: .bottom, spacing: 0) {
+            VStack(spacing: 0) {
+                Divider()
                 Button(action: { showAddFood = true }) {
-                    Image(systemName: "plus")
+                    HStack {
+                        Image(systemName: "plus.circle.fill")
+                        Text("Add Food")
+                    }
+                    .font(.headline)
+                    .foregroundColor(.white)
+                    .frame(maxWidth: .infinity)
+                    .padding()
+                    .background(Color.blue)
+                    .cornerRadius(12)
                 }
+                .padding(.horizontal)
+                .padding(.top, 8)
+                .padding(.bottom, 8)
             }
+            .background(.thinMaterial)
         }
         .sheet(isPresented: $showAddFood) {
             AddFoodView(targetDate: Calendar.current.startOfDay(for: date))

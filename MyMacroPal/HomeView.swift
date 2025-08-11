@@ -132,13 +132,6 @@ struct HomeView: View {
             }
             .navigationTitle("MyMacroPal")
             .navigationBarTitleDisplayMode(.large)
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button(action: { showAddFood = true }) {
-                        Image(systemName: "plus")
-                    }
-                }
-            }
             .sheet(isPresented: $showAddFood) {
                 AddFoodView(targetDate: Calendar.current.startOfDay(for: Date()))
                     .environment(\.managedObjectContext, viewContext)
