@@ -1,11 +1,130 @@
 import SwiftUI
 import CoreData
 import UIKit
+import Combine
+import Foundation
+
+// MARK: - Food Library (inline to avoid project file changes)
+
+struct LibraryFood: Identifiable, Codable, Equatable, Hashable {
+    let id: UUID
+    var name: String
+    var gramsPerServing: Double
+    var caloriesPerServing: Double
+    var proteinPerServing: Double
+    var fatPerServing: Double
+    var carbsPerServing: Double
+    var fiberPerServing: Double
+    var createdAt: Date
+    var updatedAt: Date
+
+    init(
+        id: UUID = UUID(),
+        name: String,
+        gramsPerServing: Double,
+        caloriesPerServing: Double,
+        proteinPerServing: Double,
+        fatPerServing: Double,
+        carbsPerServing: Double,
+        fiberPerServing: Double
+    ) {
+        self.id = id
+        self.name = name
+        self.gramsPerServing = gramsPerServing
+        self.caloriesPerServing = caloriesPerServing
+        self.proteinPerServing = proteinPerServing
+        self.fatPerServing = fatPerServing
+        self.carbsPerServing = carbsPerServing
+        self.fiberPerServing = fiberPerServing
+        self.createdAt = Date()
+        self.updatedAt = Date()
+    }
+
+    func macrosFor(grams: Double) -> (calories: Double, protein: Double, fat: Double, carbs: Double, fiber: Double) {
+        let safeServingGrams = max(gramsPerServing, 0.00001)
+        let factor = grams / safeServingGrams
+        return (
+            calories: caloriesPerServing * factor,
+            protein: proteinPerServing * factor,
+            fat: fatPerServing * factor,
+            carbs: carbsPerServing * factor,
+            fiber: fiberPerServing * factor
+        )
+    }
+}
+
+final class FoodLibraryStore: ObservableObject {
+    @Published private(set) var foods: [LibraryFood] = []
+
+    private let fileURL: URL
+    private let queue = DispatchQueue(label: "FoodLibraryStore")
+
+    init(filename: String = "food_library.json") {
+        let fm = FileManager.default
+        let dir = fm.urls(for: .applicationSupportDirectory, in: .userDomainMask).first
+            ?? fm.urls(for: .documentDirectory, in: .userDomainMask).first!
+        if !fm.fileExists(atPath: dir.path) {
+            try? fm.createDirectory(at: dir, withIntermediateDirectories: true)
+        }
+        fileURL = dir.appendingPathComponent(filename)
+        load()
+    }
+
+    func search(query: String) -> [LibraryFood] {
+        let q = query.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
+        guard !q.isEmpty else { return foods.sorted { $0.name < $1.name } }
+        return foods
+            .filter { $0.name.lowercased().contains(q) }
+            .sorted { $0.name < $1.name }
+    }
+
+    func addFood(_ food: LibraryFood) {
+        foods.append(food)
+        persist()
+    }
+
+    func updateFood(_ food: LibraryFood) {
+        if let idx = foods.firstIndex(where: { $0.id == food.id }) {
+            var updated = food
+            updated.updatedAt = Date()
+            foods[idx] = updated
+            persist()
+        }
+    }
+
+    func deleteFood(id: UUID) {
+        foods.removeAll { $0.id == id }
+        persist()
+    }
+
+    // Presets removed — library now supports grams and servings only
+
+    private func load() {
+        queue.sync {
+            guard let data = try? Data(contentsOf: fileURL) else { return }
+            do {
+                let decoded = try JSONDecoder().decode([LibraryFood].self, from: data)
+                DispatchQueue.main.async { self.foods = decoded }
+            } catch { }
+        }
+    }
+
+    private func persist() {
+        let snapshot = foods
+        queue.async {
+            do {
+                let data = try JSONEncoder().encode(snapshot)
+                try data.write(to: self.fileURL, options: [.atomic])
+            } catch { }
+        }
+    }
+}
 
 struct AddFoodView: View {
     @Environment(\.managedObjectContext) private var viewContext
     @Environment(\.dismiss) private var dismiss
     @StateObject private var viewModel = AddFoodViewModel()
+    @StateObject private var libraryStore = FoodLibraryStore()
     @State private var selectedTab = 0
     var targetDate: Date? = nil
 
@@ -14,14 +133,21 @@ struct AddFoodView: View {
             VStack(spacing: 0) {
                 // Tab picker
                 Picker("Mode", selection: $selectedTab) {
-                    Text("USDA Search").tag(0)
-                    Text("Manual Entry").tag(1)
+                    Text("My Library").tag(0)
+                    Text("Built-In").tag(1)
+                    Text("USDA Search").tag(2)
+                    Text("Manual Entry").tag(3)
                 }
                 .pickerStyle(.segmented)
                 .padding()
 
                 // Content based on selected tab
                 if selectedTab == 0 {
+                    FoodLibraryTabView(library: libraryStore, targetDate: targetDate)
+                } else if selectedTab == 1 {
+                    BuiltInFoodTabView(targetDate: targetDate)
+                        .environmentObject(libraryStore)
+                } else if selectedTab == 2 {
                     USDASearchView(viewModel: viewModel, targetDate: targetDate)
                 } else {
                     ManualEntryView(targetDate: targetDate) {
@@ -37,8 +163,16 @@ struct AddFoodView: View {
                         dismiss()
                     }
                 }
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    if selectedTab == 0 {
+                        NavigationLink(destination: FoodLibraryEditor(library: libraryStore)) {
+                            Image(systemName: "plus")
+                        }
+                    }
+                }
             }
         }
+        .environmentObject(libraryStore)
     }
 }
 
@@ -122,6 +256,398 @@ struct FoodDetailSheet: View {
     }
 }
 
+// MARK: - Built-In Food Tab
+
+struct BuiltInFoodTabView: View {
+    @Environment(\.managedObjectContext) private var viewContext
+    @EnvironmentObject private var library: FoodLibraryStore
+    var targetDate: Date? = nil
+
+    @State private var query: String = ""
+    @State private var selected: LibraryFood? = nil
+
+    private func filteredFoods() -> [LibraryFood] {
+        let q = query.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
+        let items = BuiltInFoodLibrary.foods
+        guard !q.isEmpty else { return items.sorted { $0.name < $1.name } }
+        return items.filter { $0.name.lowercased().contains(q) }.sorted { $0.name < $1.name }
+    }
+
+    var body: some View {
+        VStack(spacing: 0) {
+            HStack {
+                Image(systemName: "magnifyingglass").foregroundColor(.secondary)
+                TextField("Search built-in foods...", text: $query)
+                    .textFieldStyle(.plain)
+                    .autocorrectionDisabled(true)
+                    .textInputAutocapitalization(.never)
+            }
+            .padding()
+            .background(Color(.systemGray6))
+            .cornerRadius(10)
+            .padding(.horizontal)
+
+            let items = filteredFoods()
+            if items.isEmpty {
+                Spacer()
+                VStack(spacing: 8) {
+                    Image(systemName: "tray").font(.largeTitle).foregroundColor(.secondary)
+                    Text("No matches").foregroundColor(.secondary)
+                }
+                Spacer()
+            } else {
+                List(items) { item in
+                    VStack(alignment: .leading, spacing: 6) {
+                        Text(item.name).font(.headline)
+                        HStack(spacing: 12) {
+                            MacroChip(label: "Cal", value: String(Int(item.caloriesPerServing)), unit: "kcal")
+                            MacroChip(label: "P", value: String(Int(item.proteinPerServing)), unit: "g")
+                            MacroChip(label: "F", value: String(Int(item.fatPerServing)), unit: "g")
+                            MacroChip(label: "C", value: String(Int(item.carbsPerServing)), unit: "g")
+                            Text("per \(Int(item.gramsPerServing))g").font(.caption2).foregroundColor(.secondary)
+                        }
+                    }
+                    .padding(.vertical, 4)
+                    .contentShape(Rectangle())
+                    .onTapGesture { selected = item }
+                }
+                .listStyle(.plain)
+            }
+        }
+        .sheet(item: $selected) { item in
+            BuiltInFoodUseSheet(food: item, targetDate: targetDate)
+                .environment(\.managedObjectContext, viewContext)
+                .environmentObject(library)
+        }
+    }
+}
+
+struct BuiltInFoodUseSheet: View {
+    let food: LibraryFood
+    @Environment(\.managedObjectContext) private var viewContext
+    @Environment(\.dismiss) private var dismiss
+    @EnvironmentObject private var library: FoodLibraryStore
+    var targetDate: Date? = nil
+
+    @State private var grams: String = ""
+    @State private var servings: String = "1"
+    @State private var useMode: Int = 0 // 0 grams, 1 servings
+
+    private func computedGrams() -> Double {
+        switch useMode {
+        case 0:
+            return Double(grams) ?? 0
+        default:
+            let s = Double(servings) ?? 0
+            return s * food.gramsPerServing
+        }
+    }
+
+    private var computedMacros: (cal: Double, p: Double, f: Double, c: Double, fi: Double) {
+        let g = computedGrams()
+        let m = food.macrosFor(grams: g)
+        return (m.calories, m.protein, m.fat, m.carbs, m.fiber)
+    }
+
+    var body: some View {
+        NavigationView {
+            Form {
+                Section(header: Text("Use As")) {
+                    Picker("Mode", selection: $useMode) {
+                        Text("Grams").tag(0)
+                        Text("Servings").tag(1)
+                    }
+                    .pickerStyle(.segmented)
+                }
+
+                if useMode == 0 {
+                    HStack { Text("Grams"); Spacer(); TextField("0", text: $grams).keyboardType(.decimalPad).multilineTextAlignment(.trailing) }
+                } else {
+                    HStack { Text("Servings (\(Int(food.gramsPerServing))g ea)"); Spacer(); TextField("1", text: $servings).keyboardType(.decimalPad).multilineTextAlignment(.trailing) }
+                }
+
+                Section(header: Text("Macros")) {
+                    let m = computedMacros
+                    HStack { Text("Calories"); Spacer(); Text("\(Int(m.cal)) kcal") }
+                    HStack { Text("Protein"); Spacer(); Text("\(Int(m.p)) g") }
+                    HStack { Text("Fat"); Spacer(); Text("\(Int(m.f)) g") }
+                    HStack { Text("Carbs"); Spacer(); Text("\(Int(m.c)) g") }
+                    HStack { Text("Fiber"); Spacer(); Text("\(Int(m.fi)) g") }
+                }
+
+                Section {
+                    Button("Add to Log") { saveEntry(); dismiss() }
+                        .frame(maxWidth: .infinity)
+                    Button("Save to My Library") { saveToLibrary() }
+                        .frame(maxWidth: .infinity)
+                }
+            }
+            .navigationTitle(food.name)
+            .navigationBarTitleDisplayMode(.inline)
+        }
+    }
+
+    private func saveEntry() {
+        let grams = computedGrams()
+        let m = food.macrosFor(grams: grams)
+        let entry = FoodEntryEntity(context: viewContext)
+        entry.id = UUID()
+        entry.name = food.name
+        entry.calories = m.calories
+        entry.protein = m.protein
+        entry.fat = m.fat
+        entry.carbs = m.carbs
+        entry.fiber = m.fiber
+        entry.quantityGrams = grams
+        entry.source = "built-in"
+        entry.date = targetDate ?? Date()
+        do { try viewContext.save() } catch { print("Save error: \(error)") }
+    }
+
+    private func saveToLibrary() {
+        library.addFood(food)
+    }
+}
+
+// MARK: - Food Library Tab
+
+struct FoodLibraryTabView: View {
+    @ObservedObject var library: FoodLibraryStore
+    @Environment(\.managedObjectContext) private var viewContext
+    var targetDate: Date? = nil
+
+    @State private var query: String = ""
+    @State private var selected: LibraryFood? = nil
+
+    var body: some View {
+        VStack(spacing: 0) {
+            HStack {
+                Image(systemName: "magnifyingglass").foregroundColor(.secondary)
+                TextField("Search your library...", text: $query)
+                    .textFieldStyle(.plain)
+                    .autocorrectionDisabled(true)
+                    .textInputAutocapitalization(.never)
+            }
+            .padding()
+            .background(Color(.systemGray6))
+            .cornerRadius(10)
+            .padding(.horizontal)
+
+            let items = library.search(query: query)
+            if items.isEmpty {
+                Spacer()
+                VStack(spacing: 8) {
+                    Image(systemName: "tray").font(.largeTitle).foregroundColor(.secondary)
+                    Text(query.isEmpty ? "No foods in your library yet" : "No matches").foregroundColor(.secondary)
+                }
+                Spacer()
+            } else {
+                List {
+                    ForEach(items) { item in
+                        VStack(alignment: .leading, spacing: 6) {
+                            Text(item.name).font(.headline)
+                            HStack(spacing: 12) {
+                                MacroChip(label: "Cal", value: String(Int(item.caloriesPerServing)), unit: "kcal")
+                                MacroChip(label: "P", value: String(Int(item.proteinPerServing)), unit: "g")
+                                MacroChip(label: "F", value: String(Int(item.fatPerServing)), unit: "g")
+                                MacroChip(label: "C", value: String(Int(item.carbsPerServing)), unit: "g")
+                                Text("per \(Int(item.gramsPerServing))g").font(.caption2).foregroundColor(.secondary)
+                            }
+                        }
+                        .padding(.vertical, 4)
+                        .contentShape(Rectangle())
+                        .onTapGesture { selected = item }
+                        .contextMenu {
+                            NavigationLink(destination: FoodLibraryEditor(library: library, editing: item)) { Text("Edit") }
+                            Button(role: .destructive) { library.deleteFood(id: item.id) } label: { Text("Delete") }
+                        }
+                        .swipeActions(edge: .trailing) {
+                            Button(role: .destructive) { library.deleteFood(id: item.id) } label: { Label("Delete", systemImage: "trash") }
+                        }
+                    }
+                    .onDelete { offsets in
+                        for index in offsets { library.deleteFood(id: items[index].id) }
+                    }
+                }
+                .listStyle(.plain)
+            }
+        }
+        .sheet(item: $selected) { item in
+            LibraryFoodUseSheet(food: item, library: library, targetDate: targetDate)
+                .environment(\.managedObjectContext, viewContext)
+        }
+    }
+}
+
+// MARK: - Editor
+struct FoodLibraryEditor: View {
+    @ObservedObject var library: FoodLibraryStore
+    var editing: LibraryFood? = nil
+    @Environment(\.dismiss) private var dismiss
+
+    @State private var name: String = ""
+    @State private var gramsPerServing: String = ""
+    @State private var calories: String = ""
+    @State private var protein: String = ""
+    @State private var fat: String = ""
+    @State private var carbs: String = ""
+    @State private var fiber: String = ""
+
+    var body: some View {
+        Form {
+            Section(header: Text("Food")) {
+                TextField("Name", text: $name)
+                HStack { Text("Grams per serving"); Spacer(); TextField("0", text: $gramsPerServing).keyboardType(.decimalPad).multilineTextAlignment(.trailing) }
+            }
+            Section(header: Text("Macros per serving")) {
+                HStack { Text("Calories"); Spacer(); TextField("0", text: $calories).keyboardType(.decimalPad).multilineTextAlignment(.trailing) }
+                HStack { Text("Protein (g)"); Spacer(); TextField("0", text: $protein).keyboardType(.decimalPad).multilineTextAlignment(.trailing) }
+                HStack { Text("Fat (g)"); Spacer(); TextField("0", text: $fat).keyboardType(.decimalPad).multilineTextAlignment(.trailing) }
+                HStack { Text("Carbs (g)"); Spacer(); TextField("0", text: $carbs).keyboardType(.decimalPad).multilineTextAlignment(.trailing) }
+                HStack { Text("Fiber (g)"); Spacer(); TextField("0", text: $fiber).keyboardType(.decimalPad).multilineTextAlignment(.trailing) }
+            }
+            // Presets removed
+            Section {
+                Button(editing == nil ? "Save Food" : "Save Changes") { save() }
+                    .frame(maxWidth: .infinity)
+            }
+        }
+        .navigationTitle(editing == nil ? "New Library Food" : "Edit Library Food")
+        .navigationBarTitleDisplayMode(.inline)
+        .onAppear(perform: load)
+    }
+
+    private func load() {
+        guard let e = editing else { return }
+        name = e.name
+        gramsPerServing = e.gramsPerServing > 0 ? String(Int(e.gramsPerServing)) : ""
+        calories = String(Int(e.caloriesPerServing))
+        protein = String(Int(e.proteinPerServing))
+        fat = String(Int(e.fatPerServing))
+        carbs = String(Int(e.carbsPerServing))
+        fiber = String(Int(e.fiberPerServing))
+    }
+
+    // Preset editor removed
+
+    private func save() {
+        let gps = Double(gramsPerServing) ?? 0
+        let c = Double(calories) ?? 0
+        let p = Double(protein) ?? 0
+        let f = Double(fat) ?? 0
+        let cbs = Double(carbs) ?? 0
+        let fi = Double(fiber) ?? 0
+        var food = LibraryFood(
+            name: name,
+            gramsPerServing: gps,
+            caloriesPerServing: c,
+            proteinPerServing: p,
+            fatPerServing: f,
+            carbsPerServing: cbs,
+            fiberPerServing: fi
+        )
+        if let editing = editing {
+            food = LibraryFood(
+                id: editing.id,
+                name: name,
+                gramsPerServing: gps,
+                caloriesPerServing: c,
+                proteinPerServing: p,
+                fatPerServing: f,
+                carbsPerServing: cbs,
+                fiberPerServing: fi
+            )
+            library.updateFood(food)
+        } else {
+            library.addFood(food)
+        }
+        dismiss()
+    }
+}
+
+// MARK: - Use Sheet
+struct LibraryFoodUseSheet: View {
+    let food: LibraryFood
+    @ObservedObject var library: FoodLibraryStore
+    @Environment(\.managedObjectContext) private var viewContext
+    @Environment(\.dismiss) private var dismiss
+    var targetDate: Date? = nil
+
+    @State private var grams: String = ""
+    @State private var servings: String = "1"
+    @State private var useMode: Int = 0 // 0 grams, 1 servings
+
+    private func computedGrams() -> Double {
+        switch useMode {
+        case 0:
+            return Double(grams) ?? 0
+        default:
+            let s = Double(servings) ?? 0
+            return s * food.gramsPerServing
+        }
+    }
+
+    private var computedMacros: (cal: Double, p: Double, f: Double, c: Double, fi: Double) {
+        let g = computedGrams()
+        let m = food.macrosFor(grams: g)
+        return (m.calories, m.protein, m.fat, m.carbs, m.fiber)
+    }
+
+    var body: some View {
+        NavigationView {
+            Form {
+                Section(header: Text("Use As")) {
+                    Picker("Mode", selection: $useMode) {
+                        Text("Grams").tag(0)
+                        Text("Servings").tag(1)
+                    }
+                    .pickerStyle(.segmented)
+                }
+
+                if useMode == 0 {
+                    HStack { Text("Grams"); Spacer(); TextField("0", text: $grams).keyboardType(.decimalPad).multilineTextAlignment(.trailing) }
+                } else {
+                    HStack { Text("Servings (\(Int(food.gramsPerServing))g ea)"); Spacer(); TextField("1", text: $servings).keyboardType(.decimalPad).multilineTextAlignment(.trailing) }
+                }
+
+                Section(header: Text("Macros")) {
+                    let m = computedMacros
+                    HStack { Text("Calories"); Spacer(); Text("\(Int(m.cal)) kcal") }
+                    HStack { Text("Protein"); Spacer(); Text("\(Int(m.p)) g") }
+                    HStack { Text("Fat"); Spacer(); Text("\(Int(m.f)) g") }
+                    HStack { Text("Carbs"); Spacer(); Text("\(Int(m.c)) g") }
+                    HStack { Text("Fiber"); Spacer(); Text("\(Int(m.fi)) g") }
+                }
+
+                Section {
+                    Button("Add to Log") { saveEntry(); dismiss() }
+                        .frame(maxWidth: .infinity)
+                }
+            }
+            .navigationTitle(food.name)
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar { ToolbarItem(placement: .navigationBarTrailing) { NavigationLink("Edit", destination: FoodLibraryEditor(library: library, editing: food)) } }
+        }
+    }
+
+    private func saveEntry() {
+        let grams = computedGrams()
+        let m = food.macrosFor(grams: grams)
+        let entry = FoodEntryEntity(context: viewContext)
+        entry.id = UUID()
+        entry.name = food.name
+        entry.calories = m.calories
+        entry.protein = m.protein
+        entry.fat = m.fat
+        entry.carbs = m.carbs
+        entry.fiber = m.fiber
+        entry.quantityGrams = grams
+        entry.source = "library"
+        entry.date = targetDate ?? Date()
+        do { try viewContext.save() } catch { print("Save error: \(error)") }
+    }
+}
+
 struct USDASearchView: View {
     @ObservedObject var viewModel: AddFoodViewModel
     @Environment(\.managedObjectContext) private var viewContext
@@ -141,7 +667,7 @@ struct USDASearchView: View {
                     .autocorrectionDisabled(true)
                     .textInputAutocapitalization(.never)
                     .keyboardType(.webSearch)
-                    .onChange(of: searchText) { newValue in
+                    .onChange(of: searchText) { _, newValue in
                         debounceSearch(newValue)
                     }
             }
@@ -267,6 +793,7 @@ struct MacroChip: View {
 
 struct ManualEntryView: View {
     @Environment(\.managedObjectContext) private var viewContext
+    @EnvironmentObject private var library: FoodLibraryStore
     @State private var name = ""
     @State private var calories = ""
     @State private var protein = ""
@@ -343,6 +870,12 @@ struct ManualEntryView: View {
                 .background(Color.blue)
                 .cornerRadius(8)
                 .disabled(name.isEmpty)
+
+                Button("Save to My Library") {
+                    presentSaveToLibrary()
+                }
+                .frame(maxWidth: .infinity)
+                .padding(.top, 4)
             }
         }
     }
@@ -365,6 +898,31 @@ struct ManualEntryView: View {
         } catch {
             print("Save error: \(error)")
         }
+    }
+
+    private func presentSaveToLibrary() {
+        let alert = UIAlertController(title: "Save to Library", message: "Enter grams per serving for this food.", preferredStyle: .alert)
+        alert.addTextField { tf in
+            tf.placeholder = "Grams per serving"
+            tf.keyboardType = .decimalPad
+            tf.text = "100"
+        }
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+        alert.addAction(UIAlertAction(title: "Save", style: .default, handler: { _ in
+            let gramsText = alert.textFields?.first?.text ?? "100"
+            let gps = Double(gramsText) ?? 100
+            let item = LibraryFood(
+                name: name.isEmpty ? "Untitled" : name,
+                gramsPerServing: max(gps, 1),
+                caloriesPerServing: Double(calories) ?? 0,
+                proteinPerServing: Double(protein) ?? 0,
+                fatPerServing: Double(fat) ?? 0,
+                carbsPerServing: Double(carbs) ?? 0,
+                fiberPerServing: Double(fiber) ?? 0
+            )
+            library.addFood(item)
+        }))
+        UIApplication.shared.windows.first?.rootViewController?.present(alert, animated: true)
     }
 }
 

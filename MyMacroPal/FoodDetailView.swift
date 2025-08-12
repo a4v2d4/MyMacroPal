@@ -5,6 +5,7 @@ struct FoodDetailView: View {
     @ObservedObject var viewModel: FoodDetailViewModel
     @Environment(\.managedObjectContext) private var viewContext
     @Environment(\.dismiss) private var dismiss
+    @EnvironmentObject private var library: FoodLibraryStore
     var targetDate: Date? = nil
 
     var body: some View {
@@ -38,7 +39,7 @@ struct FoodDetailView: View {
                                 .textInputAutocapitalization(.never)
                                 .textFieldStyle(.roundedBorder)
                                 .frame(width: 100)
-                                .onChange(of: viewModel.chosenGrams) { newValue in
+                                .onChange(of: viewModel.chosenGrams) { _, newValue in
                                     viewModel.calculate(for: newValue)
                                 }
                             
@@ -116,7 +117,7 @@ struct FoodDetailView: View {
 
                     Spacer()
 
-                    // Save button
+                    // Primary save to log button
                     Button(action: {
                         saveEntry()
                         dismiss()
@@ -133,7 +134,20 @@ struct FoodDetailView: View {
                         .cornerRadius(12)
                     }
                     .padding(.horizontal)
-                    .padding(.bottom)
+
+                    // Secondary save to library button
+                    Button(action: { saveToLibrary() }) {
+                        HStack {
+                            Image(systemName: "books.vertical")
+                            Text("Save to My Library")
+                        }
+                        .font(.headline)
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .background(Color(.systemGray6))
+                        .cornerRadius(12)
+                    }
+                    .padding([.horizontal, .bottom])
                 }
             }
             .navigationTitle("Food Details")
@@ -167,6 +181,20 @@ struct FoodDetailView: View {
         } catch {
             print("Save error: \(error)")
         }
+    }
+
+    private func saveToLibrary() {
+        let servingGrams = max(viewModel.chosenGrams, 1)
+        let item = LibraryFood(
+            name: viewModel.food.description,
+            gramsPerServing: servingGrams,
+            caloriesPerServing: viewModel.calculatedCalories,
+            proteinPerServing: viewModel.calculatedProtein,
+            fatPerServing: viewModel.calculatedFat,
+            carbsPerServing: viewModel.calculatedCarbs,
+            fiberPerServing: viewModel.calculatedFiber
+        )
+        library.addFood(item)
     }
 }
 
@@ -212,4 +240,5 @@ struct MacroDetailRow: View {
     
     FoodDetailView(viewModel: FoodDetailViewModel(food: sampleFood))
         .environment(\.managedObjectContext, PersistenceController.shared.container.viewContext)
+        .environmentObject(FoodLibraryStore())
 }

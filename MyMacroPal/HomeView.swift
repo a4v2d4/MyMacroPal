@@ -139,7 +139,7 @@ struct HomeView: View {
             .onAppear {
                 viewModel.calculateTotalsForToday()
             }
-            .onChange(of: todayEntries.count) { _ in
+            .onChange(of: todayEntries.count) {
                 viewModel.calculateTotalsForToday()
             }
         }
@@ -182,6 +182,9 @@ struct MacroRow: View {
                     .foregroundColor(.primary)
                 Spacer()
                 Text("\(Int(value.sanitizedNonNegativeFinite))/\(Int(goal.sanitizedNonNegativeFinite))")
+                    .font(.subheadline)
+                    .foregroundColor(.secondary)
+                Text("(\(Int(progress * 100))%)")
                     .font(.subheadline)
                     .foregroundColor(.secondary)
             }
