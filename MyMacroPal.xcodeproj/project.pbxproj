@@ -6,6 +6,12 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		93F37DD42F185CB200E968D5 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 93F37DD32F185CB200E968D5 /* WidgetKit.framework */; };
+		93F37DD62F185CB200E968D5 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 93F37DD52F185CB200E968D5 /* SwiftUI.framework */; };
+		93F37DE52F185CB300E968D5 /* MyMacroPalWidgetExtensionExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 93F37DD12F185CB200E968D5 /* MyMacroPalWidgetExtensionExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		93A6C6792E48365400111DC4 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -21,13 +27,38 @@
 			remoteGlobalIDString = 93A6C6622E48365200111DC4;
 			remoteInfo = MyMacroPal;
 		};
+		93F37DE32F185CB300E968D5 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 93A6C65B2E48365200111DC4 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 93F37DD02F185CB200E968D5;
+			remoteInfo = MyMacroPalWidgetExtensionExtension;
+		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		93F37DEA2F185CB300E968D5 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				93F37DE52F185CB300E968D5 /* MyMacroPalWidgetExtensionExtension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		93A6C6632E48365200111DC4 /* MyMacroPal.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MyMacroPal.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		93A6C6782E48365400111DC4 /* MyMacroPalTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MyMacroPalTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		93A6C6822E48365400111DC4 /* MyMacroPalUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MyMacroPalUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		93C0F0C12E5A000000000002 /* AppConfig.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = AppConfig.xcconfig; sourceTree = "<group>"; };
+		93F37DD12F185CB200E968D5 /* MyMacroPalWidgetExtensionExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = MyMacroPalWidgetExtensionExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		93F37DD32F185CB200E968D5 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
+		93F37DD52F185CB200E968D5 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
+		93F37DF02F185D3C00E968D5 /* MyMacroPalWidgetExtensionExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MyMacroPalWidgetExtensionExtension.entitlements; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -38,6 +69,23 @@
 			);
 			target = 93A6C6622E48365200111DC4 /* MyMacroPal */;
 		};
+		93F37DE92F185CB300E968D5 /* Exceptions for "MyMacroPalWidgetExtension" folder in "MyMacroPalWidgetExtensionExtension" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 93F37DD02F185CB200E968D5 /* MyMacroPalWidgetExtensionExtension */;
+		};
+		93F37DF22F185F1D00E968D5 /* Exceptions for "MyMacroPal" folder in "MyMacroPalWidgetExtensionExtension" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Micronutrients.swift,
+				Models.swift,
+				MyMacroPal.xcdatamodeld,
+				SharedConfig.swift,
+			);
+			target = 93F37DD02F185CB200E968D5 /* MyMacroPalWidgetExtensionExtension */;
+		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -45,6 +93,7 @@
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
 				93BB30922E4876C1000C4923 /* Exceptions for "MyMacroPal" folder in "MyMacroPal" target */,
+				93F37DF22F185F1D00E968D5 /* Exceptions for "MyMacroPal" folder in "MyMacroPalWidgetExtensionExtension" target */,
 			);
 			path = MyMacroPal;
 			sourceTree = "<group>";
@@ -57,6 +106,14 @@
 		93A6C6852E48365400111DC4 /* MyMacroPalUITests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = MyMacroPalUITests;
+			sourceTree = "<group>";
+		};
+		93F37DD72F185CB200E968D5 /* MyMacroPalWidgetExtension */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				93F37DE92F185CB300E968D5 /* Exceptions for "MyMacroPalWidgetExtension" folder in "MyMacroPalWidgetExtensionExtension" target */,
+			);
+			path = MyMacroPalWidgetExtension;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -83,16 +140,28 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		93F37DCE2F185CB200E968D5 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				93F37DD62F185CB200E968D5 /* SwiftUI.framework in Frameworks */,
+				93F37DD42F185CB200E968D5 /* WidgetKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
 		93A6C65A2E48365200111DC4 = {
 			isa = PBXGroup;
 			children = (
+				93F37DF02F185D3C00E968D5 /* MyMacroPalWidgetExtensionExtension.entitlements */,
 				93A6C6652E48365200111DC4 /* MyMacroPal */,
 				93A6C67B2E48365400111DC4 /* MyMacroPalTests */,
 				93A6C6852E48365400111DC4 /* MyMacroPalUITests */,
 				93C0F0C02E5A000000000001 /* Config */,
+				93F37DD72F185CB200E968D5 /* MyMacroPalWidgetExtension */,
+				93F37DD22F185CB200E968D5 /* Frameworks */,
 				93A6C6642E48365200111DC4 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -103,6 +172,7 @@
 				93A6C6632E48365200111DC4 /* MyMacroPal.app */,
 				93A6C6782E48365400111DC4 /* MyMacroPalTests.xctest */,
 				93A6C6822E48365400111DC4 /* MyMacroPalUITests.xctest */,
+				93F37DD12F185CB200E968D5 /* MyMacroPalWidgetExtensionExtension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -115,6 +185,15 @@
 			path = Config;
 			sourceTree = "<group>";
 		};
+		93F37DD22F185CB200E968D5 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				93F37DD32F185CB200E968D5 /* WidgetKit.framework */,
+				93F37DD52F185CB200E968D5 /* SwiftUI.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -125,10 +204,12 @@
 				93A6C65F2E48365200111DC4 /* Sources */,
 				93A6C6602E48365200111DC4 /* Frameworks */,
 				93A6C6612E48365200111DC4 /* Resources */,
+				93F37DEA2F185CB300E968D5 /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				93F37DE42F185CB300E968D5 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				93A6C6652E48365200111DC4 /* MyMacroPal */,
@@ -186,6 +267,28 @@
 			productReference = 93A6C6822E48365400111DC4 /* MyMacroPalUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
+		93F37DD02F185CB200E968D5 /* MyMacroPalWidgetExtensionExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 93F37DE62F185CB300E968D5 /* Build configuration list for PBXNativeTarget "MyMacroPalWidgetExtensionExtension" */;
+			buildPhases = (
+				93F37DCD2F185CB200E968D5 /* Sources */,
+				93F37DCE2F185CB200E968D5 /* Frameworks */,
+				93F37DCF2F185CB200E968D5 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				93F37DD72F185CB200E968D5 /* MyMacroPalWidgetExtension */,
+			);
+			name = MyMacroPalWidgetExtensionExtension;
+			packageProductDependencies = (
+			);
+			productName = MyMacroPalWidgetExtensionExtension;
+			productReference = 93F37DD12F185CB200E968D5 /* MyMacroPalWidgetExtensionExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -207,6 +310,9 @@
 						CreatedOnToolsVersion = 16.2;
 						TestTargetID = 93A6C6622E48365200111DC4;
 					};
+					93F37DD02F185CB200E968D5 = {
+						CreatedOnToolsVersion = 16.2;
+					};
 				};
 			};
 			buildConfigurationList = 93A6C65E2E48365200111DC4 /* Build configuration list for PBXProject "MyMacroPal" */;
@@ -226,6 +332,7 @@
 				93A6C6622E48365200111DC4 /* MyMacroPal */,
 				93A6C6772E48365400111DC4 /* MyMacroPalTests */,
 				93A6C6812E48365400111DC4 /* MyMacroPalUITests */,
+				93F37DD02F185CB200E968D5 /* MyMacroPalWidgetExtensionExtension */,
 			);
 		};
 /* End PBXProject section */
@@ -246,6 +353,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		93A6C6802E48365400111DC4 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		93F37DCF2F185CB200E968D5 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -276,6 +390,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		93F37DCD2F185CB200E968D5 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -288,6 +409,11 @@
 			isa = PBXTargetDependency;
 			target = 93A6C6622E48365200111DC4 /* MyMacroPal */;
 			targetProxy = 93A6C6832E48365400111DC4 /* PBXContainerItemProxy */;
+		};
+		93F37DE42F185CB300E968D5 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 93F37DD02F185CB200E968D5 /* MyMacroPalWidgetExtensionExtension */;
+			targetProxy = 93F37DE32F185CB300E968D5 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -417,6 +543,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = MyMacroPal/MyMacroPal.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"MyMacroPal/Preview Content\"";
@@ -448,6 +575,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = MyMacroPal/MyMacroPal.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"MyMacroPal/Preview Content\"";
@@ -541,6 +669,62 @@
 			};
 			name = Release;
 		};
+		93F37DE72F185CB300E968D5 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = MyMacroPalWidgetExtension/MyMacroPalWidgetExtension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = T7J4DHX4TU;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = MyMacroPalWidgetExtension/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = MyMacroPalWidgetExtension;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = AVIDWareAthletics.MyMacroPal.MyMacroPalWidgetExtension;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		93F37DE82F185CB300E968D5 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = MyMacroPalWidgetExtension/MyMacroPalWidgetExtension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = T7J4DHX4TU;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = MyMacroPalWidgetExtension/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = MyMacroPalWidgetExtension;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = AVIDWareAthletics.MyMacroPal.MyMacroPalWidgetExtension;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -576,6 +760,15 @@
 			buildConfigurations = (
 				93A6C6932E48365400111DC4 /* Debug */,
 				93A6C6942E48365400111DC4 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		93F37DE62F185CB300E968D5 /* Build configuration list for PBXNativeTarget "MyMacroPalWidgetExtensionExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				93F37DE72F185CB300E968D5 /* Debug */,
+				93F37DE82F185CB300E968D5 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

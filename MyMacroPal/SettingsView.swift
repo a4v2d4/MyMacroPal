@@ -1,11 +1,11 @@
 import SwiftUI
 
 struct SettingsView: View {
-    @State private var calories = UserDefaults.standard.double(forKey: "goalCalories", default: 2000)
-    @State private var protein = UserDefaults.standard.double(forKey: "goalProtein", default: 150)
-    @State private var fat = UserDefaults.standard.double(forKey: "goalFat", default: 70)
-    @State private var carbs = UserDefaults.standard.double(forKey: "goalCarbs", default: 250)
-    @State private var fiber = UserDefaults.standard.double(forKey: "goalFiber", default: 30)
+    @State private var calories = UserDefaults.shared.double(forKey: "goalCalories", default: 2000)
+    @State private var protein = UserDefaults.shared.double(forKey: "goalProtein", default: 150)
+    @State private var fat = UserDefaults.shared.double(forKey: "goalFat", default: 70)
+    @State private var carbs = UserDefaults.shared.double(forKey: "goalCarbs", default: 250)
+    @State private var fiber = UserDefaults.shared.double(forKey: "goalFiber", default: 30)
     @State private var showingSaveAlert = false
 
     var body: some View {
@@ -117,11 +117,11 @@ struct SettingsView: View {
     }
 
     private func saveGoals() {
-        UserDefaults.standard.set(calories, forKey: "goalCalories")
-        UserDefaults.standard.set(protein, forKey: "goalProtein")
-        UserDefaults.standard.set(fat, forKey: "goalFat")
-        UserDefaults.standard.set(carbs, forKey: "goalCarbs")
-        UserDefaults.standard.set(fiber, forKey: "goalFiber")
+        UserDefaults.shared.set(calories, forKey: "goalCalories")
+        UserDefaults.shared.set(protein, forKey: "goalProtein")
+        UserDefaults.shared.set(fat, forKey: "goalFat")
+        UserDefaults.shared.set(carbs, forKey: "goalCarbs")
+        UserDefaults.shared.set(fiber, forKey: "goalFiber")
         
         showingSaveAlert = true
     }

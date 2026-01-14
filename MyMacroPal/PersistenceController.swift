@@ -9,6 +9,9 @@ final class PersistenceController {
         container = NSPersistentContainer(name: "MyMacroPal")
         if inMemory {
             container.persistentStoreDescriptions.first?.url = URL(fileURLWithPath: "/dev/null")
+        } else {
+            // Use shared app group container for widget access
+            container.persistentStoreDescriptions.first?.url = SharedConfig.sharedContainerURL
         }
         container.loadPersistentStores { desc, error in
             if let error = error {

@@ -104,11 +104,11 @@ struct DailyLogRow: View {
     }
 
     private var goalCalories: Double {
-        UserDefaults.standard.double(forKey: "goalCalories", default: 2000)
+        UserDefaults.shared.double(forKey: "goalCalories", default: 2000)
     }
 
     private var goalProtein: Double {
-        UserDefaults.standard.double(forKey: "goalProtein", default: 150)
+        UserDefaults.shared.double(forKey: "goalProtein", default: 150)
     }
 
     var body: some View {
