@@ -114,6 +114,37 @@ struct FoodDetailView: View {
                         .cornerRadius(12)
                         .padding(.horizontal)
                     }
+                    
+                    // Micronutrient summary
+                    VStack(spacing: 16) {
+                        MicronutrientSummaryView(
+                            micronutrients: viewModel.calculatedMicronutrients,
+                            highlights: [.vitaminA, .vitaminC, .vitaminD, .vitaminK2, .calcium, .iron, .iodine, .chromium]
+                        )
+                        .padding(.horizontal)
+                        
+                        NavigationLink(destination: ScrollView {
+                            MicronutrientView(micronutrients: viewModel.calculatedMicronutrients)
+                                .padding()
+                        }
+                        .navigationTitle("All Micronutrients")
+                        .navigationBarTitleDisplayMode(.inline)
+                        ) {
+                            HStack {
+                                Text("View All Micronutrients")
+                                    .font(.subheadline)
+                                    .fontWeight(.medium)
+                                Spacer()
+                                Image(systemName: "chevron.right")
+                                    .font(.caption)
+                            }
+                            .foregroundColor(.blue)
+                            .padding()
+                            .background(Color(.systemGray6))
+                            .cornerRadius(12)
+                            .padding(.horizontal)
+                        }
+                    }
 
                     Spacer()
 
@@ -175,6 +206,7 @@ struct FoodDetailView: View {
         entry.source = "usda"
         entry.fdcId = Int64(viewModel.food.fdcId)
         entry.date = targetDate ?? Date()
+        entry.micronutrients = viewModel.calculatedMicronutrients
 
         do {
             try viewContext.save()

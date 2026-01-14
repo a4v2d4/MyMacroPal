@@ -65,6 +65,18 @@ extension FoodEntryEntity {
     var totalFiber: Double {
         return fiber
     }
+    
+    var micronutrients: MicronutrientData {
+        get {
+            guard let data = micronutrientsData else { return MicronutrientData() }
+            let decoder = JSONDecoder()
+            return (try? decoder.decode(MicronutrientData.self, from: data)) ?? MicronutrientData()
+        }
+        set {
+            let encoder = JSONEncoder()
+            micronutrientsData = try? encoder.encode(newValue)
+        }
+    }
 }
 
 extension DailyLogEntity {
@@ -91,5 +103,10 @@ extension DailyLogEntity {
     var totalFiber: Double {
         guard let entries = entries as? Set<FoodEntryEntity> else { return 0 }
         return entries.reduce(0) { $0 + $1.fiber }
+    }
+    
+    var totalMicronutrients: MicronutrientData {
+        guard let entries = entries as? Set<FoodEntryEntity> else { return MicronutrientData() }
+        return entries.reduce(MicronutrientData()) { $0 + $1.micronutrients }
     }
 }

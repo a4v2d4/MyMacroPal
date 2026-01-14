@@ -71,6 +71,30 @@ struct HomeView: View {
                         }
                     }
 
+                    Section {
+                        NavigationLink(destination: ScrollView {
+                            MicronutrientView(micronutrients: viewModel.totalMicronutrients)
+                                .padding()
+                        }
+                        .navigationTitle("Micronutrients")
+                        .navigationBarTitleDisplayMode(.inline)
+                        ) {
+                            HStack {
+                                Image(systemName: "chart.bar.fill")
+                                    .foregroundColor(.blue)
+                                Text("View Micronutrients")
+                                    .font(.subheadline)
+                                    .fontWeight(.medium)
+                                Spacer()
+                                Image(systemName: "chevron.right")
+                                    .font(.caption)
+                                    .foregroundColor(.secondary)
+                            }
+                        }
+                    } header: {
+                        Text("Vitamins & Minerals")
+                    }
+                    
                     Section("Today's Foods") {
                         if todayEntries.isEmpty {
                             Text("No food items yet")

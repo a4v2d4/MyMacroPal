@@ -9,6 +9,7 @@ final class HomeViewModel: ObservableObject {
     @Published var totalFat: Double = 0
     @Published var totalCarbs: Double = 0
     @Published var totalFiber: Double = 0
+    @Published var totalMicronutrients: MicronutrientData = MicronutrientData()
 
     private var context: NSManagedObjectContext
     private var cancellables = Set<AnyCancellable>()
@@ -31,6 +32,7 @@ final class HomeViewModel: ObservableObject {
             totalFat = items.reduce(0) { $0 + $1.fat.sanitizedNonNegativeFinite }.sanitizedNonNegativeFinite
             totalCarbs = items.reduce(0) { $0 + $1.carbs.sanitizedNonNegativeFinite }.sanitizedNonNegativeFinite
             totalFiber = items.reduce(0) { $0 + $1.fiber.sanitizedNonNegativeFinite }.sanitizedNonNegativeFinite
+            totalMicronutrients = items.reduce(MicronutrientData()) { $0 + $1.micronutrients }
         } catch {
             print("Fetch error: \(error)")
         }
@@ -97,6 +99,7 @@ final class FoodDetailViewModel: ObservableObject {
     @Published var calculatedFat: Double = 0
     @Published var calculatedCarbs: Double = 0
     @Published var calculatedFiber: Double = 0
+    @Published var calculatedMicronutrients: MicronutrientData = MicronutrientData()
 
     init(food: USDAFood) {
         self.food = food
@@ -128,5 +131,13 @@ final class FoodDetailViewModel: ObservableObject {
         calculatedFat = (per100f * factor).sanitizedNonNegativeFinite
         calculatedCarbs = (per100c * factor).sanitizedNonNegativeFinite
         calculatedFiber = (per100fi * factor).sanitizedNonNegativeFinite
+        
+        // Extract and scale micronutrients (USDA values are per 100g)
+        let per100gMicros = food.extractMicronutrients()
+        var scaledMicros = MicronutrientData()
+        for nutrient in Micronutrient.allCases {
+            scaledMicros[nutrient] = (per100gMicros[nutrient] * factor).sanitizedNonNegativeFinite
+        }
+        calculatedMicronutrients = scaledMicros
     }
 }

@@ -69,6 +69,18 @@ struct SettingsView: View {
                 }
                 .listRowBackground(Color.clear)
             }
+            
+            Section(header: Text("Micronutrient Daily Values"), 
+                    footer: Text("Based on FDA Daily Value standards for adults. These values are used to calculate % Daily Value (DV) for each micronutrient.")) {
+                NavigationLink(destination: MicronutrientDailyValuesView()) {
+                    HStack {
+                        Image(systemName: "info.circle.fill")
+                            .foregroundColor(.blue)
+                        Text("View Daily Values Reference")
+                        Spacer()
+                    }
+                }
+            }
 
             Section(header: Text("About"), footer: Text("MyMacroPal - Simple macro tracking without subscriptions")) {
                 VStack(alignment: .leading, spacing: 8) {
@@ -145,6 +157,47 @@ struct MacroGoalRow: View {
                 .font(.subheadline)
                 .foregroundColor(.secondary)
                 .frame(width: 30, alignment: .leading)
+        }
+    }
+}
+
+struct MicronutrientDailyValuesView: View {
+    var body: some View {
+        List {
+            ForEach(MicronutrientCategory.allCases, id: \.self) { category in
+                Section(header: Text(category.rawValue)) {
+                    ForEach(Micronutrient.allCases.filter { $0.category == category }) { nutrient in
+                        HStack {
+                            Text(nutrient.rawValue)
+                                .font(.subheadline)
+                            Spacer()
+                            Text("\(formatValue(nutrient.dailyValue)) \(nutrient.unit)")
+                                .font(.subheadline)
+                                .foregroundColor(.secondary)
+                            if nutrient.isLimitNutrient {
+                                Image(systemName: "exclamationmark.triangle.fill")
+                                    .font(.caption)
+                                    .foregroundColor(.orange)
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        .listStyle(.insetGrouped)
+        .navigationTitle("Daily Value Standards")
+        .navigationBarTitleDisplayMode(.inline)
+    }
+    
+    private func formatValue(_ value: Double) -> String {
+        if value >= 1000 {
+            return String(format: "%.0f", value)
+        } else if value >= 100 {
+            return String(format: "%.0f", value)
+        } else if value >= 10 {
+            return String(format: "%.1f", value)
+        } else {
+            return String(format: "%.1f", value)
         }
     }
 }
