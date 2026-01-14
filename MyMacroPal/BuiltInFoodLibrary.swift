@@ -2,7 +2,32 @@ import Foundation
 
 /// Built-in foods that ship with the app, derived from markdown in `BuiltInFoods/`.
 /// Values are per labeled serving. `gramsPerServing` is used for scaling when using grams/servings.
+/// Micronutrients: Focused on 8 key nutrients for body recomposition (per serving, from USDA data)
 enum BuiltInFoodLibrary {
+    
+    /// Helper to create micronutrient data for body recomposition essentials
+    private static func micros(
+        magnesium: Double? = nil,
+        zinc: Double? = nil,
+        iron: Double? = nil,
+        potassium: Double? = nil,
+        sodium: Double? = nil,
+        vitaminD: Double? = nil,
+        vitaminK2: Double? = nil,
+        chromium: Double? = nil
+    ) -> MicronutrientData {
+        var data = MicronutrientData()
+        if let magnesium = magnesium { data[.magnesium] = magnesium }
+        if let zinc = zinc { data[.zinc] = zinc }
+        if let iron = iron { data[.iron] = iron }
+        if let potassium = potassium { data[.potassium] = potassium }
+        if let sodium = sodium { data[.sodium] = sodium }
+        if let vitaminD = vitaminD { data[.vitaminD] = vitaminD }
+        if let vitaminK2 = vitaminK2 { data[.vitaminK2] = vitaminK2 }
+        if let chromium = chromium { data[.chromium] = chromium }
+        return data
+    }
+    
     static let foods: [LibraryFood] = [
         // MARK: Oils
         LibraryFood(
@@ -23,7 +48,13 @@ enum BuiltInFoodLibrary {
             proteinPerServing: 16,
             fatPerServing: 6,
             carbsPerServing: 7,
-            fiberPerServing: 0
+            fiberPerServing: 0,
+            micronutrientsPerServing: micros(
+                magnesium: 19.0,     // Muscle recovery
+                zinc: 0.9,           // Protein synthesis
+                potassium: 220.0,    // Muscle function
+                sodium: 60.0
+            )
         ),
 
         // MARK: Grains
@@ -94,7 +125,14 @@ enum BuiltInFoodLibrary {
             proteinPerServing: 6,
             fatPerServing: 10,
             carbsPerServing: 11,
-            fiberPerServing: 10
+            fiberPerServing: 10,
+            micronutrientsPerServing: micros(
+                magnesium: 95.0,     // VERY HIGH - muscle recovery
+                zinc: 1.4,
+                iron: 2.3,           // HIGH - oxygen transport
+                potassium: 120.0,
+                sodium: 5.0
+            )
         ),
 
         // MARK: Eggs
@@ -105,7 +143,14 @@ enum BuiltInFoodLibrary {
             proteinPerServing: 6,
             fatPerServing: 5,
             carbsPerServing: 0,
-            fiberPerServing: 0
+            fiberPerServing: 0,
+            micronutrientsPerServing: micros(
+                zinc: 0.65,          // Hormone support
+                iron: 0.9,           // Oxygen transport
+                potassium: 69.0,
+                sodium: 71.0,
+                vitaminD: 1.1        // Bone health & testosterone
+            )
         ),
         LibraryFood(
             name: "Large Egg White",
@@ -114,7 +159,11 @@ enum BuiltInFoodLibrary {
             proteinPerServing: 3.6,
             fatPerServing: 0.05,
             carbsPerServing: 0.24,
-            fiberPerServing: 0
+            fiberPerServing: 0,
+            micronutrientsPerServing: micros(
+                potassium: 54.0,
+                sodium: 55.0
+            )
         ),
 
         // MARK: Deli Meat
@@ -136,7 +185,14 @@ enum BuiltInFoodLibrary {
             proteinPerServing: 30,
             fatPerServing: 0.5,
             carbsPerServing: 0.8,
-            fiberPerServing: 0
+            fiberPerServing: 0,
+            micronutrientsPerServing: micros(
+                magnesium: 35.0,     // Recovery
+                zinc: 2.5,           // Protein synthesis
+                iron: 0.5,
+                potassium: 280.0,
+                sodium: 105.0
+            )
         ),
 
         // MARK: Vegetables (Raw)
@@ -147,7 +203,14 @@ enum BuiltInFoodLibrary {
             proteinPerServing: 3,
             fatPerServing: 0,
             carbsPerServing: 26,
-            fiberPerServing: 2
+            fiberPerServing: 2,
+            micronutrientsPerServing: micros(
+                magnesium: 34.5,
+                iron: 1.2,
+                potassium: 634.0,    // HIGH - prevents water retention
+                sodium: 9.0,
+                chromium: 1.5        // Glucose metabolism
+            )
         ),
         LibraryFood(
             name: "Red Potato (raw)",
@@ -156,7 +219,14 @@ enum BuiltInFoodLibrary {
             proteinPerServing: 3,
             fatPerServing: 0,
             carbsPerServing: 26,
-            fiberPerServing: 2
+            fiberPerServing: 2,
+            micronutrientsPerServing: micros(
+                magnesium: 34.5,
+                iron: 1.2,
+                potassium: 634.0,    // HIGH
+                sodium: 9.0,
+                chromium: 1.5
+            )
         ),
         LibraryFood(
             name: "Sweet Potato (raw)",
@@ -165,7 +235,13 @@ enum BuiltInFoodLibrary {
             proteinPerServing: 2,
             fatPerServing: 0,
             carbsPerServing: 26,
-            fiberPerServing: 4
+            fiberPerServing: 4,
+            micronutrientsPerServing: micros(
+                magnesium: 32.5,
+                iron: 0.8,
+                potassium: 429.0,
+                sodium: 72.0
+            )
         ),
         LibraryFood(
             name: "Broccoli (raw)",
@@ -174,7 +250,15 @@ enum BuiltInFoodLibrary {
             proteinPerServing: 3,
             fatPerServing: 0,
             carbsPerServing: 5,
-            fiberPerServing: 2
+            fiberPerServing: 2,
+            micronutrientsPerServing: micros(
+                magnesium: 19.0,
+                zinc: 0.4,
+                iron: 0.7,
+                potassium: 288.0,
+                sodium: 30.0,
+                chromium: 1.5        // Insulin sensitivity
+            )
         ),
         LibraryFood(
             name: "Broccolini (raw)",
@@ -183,7 +267,14 @@ enum BuiltInFoodLibrary {
             proteinPerServing: 3,
             fatPerServing: 0,
             carbsPerServing: 4,
-            fiberPerServing: 2
+            fiberPerServing: 2,
+            micronutrientsPerServing: micros(
+                magnesium: 18.0,
+                zinc: 0.4,
+                iron: 0.7,
+                potassium: 272.0,
+                sodium: 28.0
+            )
         ),
         LibraryFood(
             name: "Spinach (raw)",
@@ -192,7 +283,14 @@ enum BuiltInFoodLibrary {
             proteinPerServing: 1,
             fatPerServing: 0,
             carbsPerServing: 1,
-            fiberPerServing: 1
+            fiberPerServing: 1,
+            micronutrientsPerServing: micros(
+                magnesium: 24.0,     // HIGH per gram - muscle relaxation
+                zinc: 0.16,
+                iron: 0.8,           // Good iron source
+                potassium: 168.0,
+                sodium: 24.0
+            )
         ),
         LibraryFood(
             name: "Zucchini (raw)",
@@ -221,7 +319,13 @@ enum BuiltInFoodLibrary {
             proteinPerServing: 1,
             fatPerServing: 0,
             carbsPerServing: 21,
-            fiberPerServing: 4
+            fiberPerServing: 4,
+            micronutrientsPerServing: micros(
+                magnesium: 9.0,
+                iron: 0.4,
+                potassium: 116.0,
+                sodium: 2.0
+            )
         ),
         LibraryFood(
             name: "Raspberries",
@@ -230,7 +334,14 @@ enum BuiltInFoodLibrary {
             proteinPerServing: 1,
             fatPerServing: 1,
             carbsPerServing: 15,
-            fiberPerServing: 8
+            fiberPerServing: 8,
+            micronutrientsPerServing: micros(
+                magnesium: 27.0,     // Good magnesium source
+                zinc: 0.5,
+                iron: 0.9,
+                potassium: 186.0,
+                sodium: 1.0
+            )
         ),
         LibraryFood(
             name: "Honeycrisp Apple",
@@ -239,7 +350,13 @@ enum BuiltInFoodLibrary {
             proteinPerServing: 0,
             fatPerServing: 0,
             carbsPerServing: 25,
-            fiberPerServing: 4
+            fiberPerServing: 4,
+            micronutrientsPerServing: micros(
+                magnesium: 9.0,
+                iron: 0.2,
+                potassium: 195.0,
+                sodium: 2.0
+            )
         ),
         LibraryFood(
             name: "Banana",
@@ -248,7 +365,14 @@ enum BuiltInFoodLibrary {
             proteinPerServing: 1,
             fatPerServing: 0,
             carbsPerServing: 27,
-            fiberPerServing: 3
+            fiberPerServing: 3,
+            micronutrientsPerServing: micros(
+                magnesium: 32.0,     // Good magnesium
+                zinc: 0.2,
+                iron: 0.3,
+                potassium: 430.0,    // HIGH - prevents cramping
+                sodium: 1.0
+            )
         ),
         LibraryFood(
             name: "Orange",
@@ -275,7 +399,14 @@ enum BuiltInFoodLibrary {
             proteinPerServing: 4,
             fatPerServing: 29,
             carbsPerServing: 17,
-            fiberPerServing: 14
+            fiberPerServing: 14,
+            micronutrientsPerServing: micros(
+                magnesium: 58.0,     // HIGH - recovery
+                zinc: 1.3,
+                iron: 1.1,
+                potassium: 970.0,    // VERY HIGH - prevents cramping
+                sodium: 14.0
+            )
         ),
 
         // MARK: Meat (Raw)
@@ -286,7 +417,14 @@ enum BuiltInFoodLibrary {
             proteinPerServing: 31,
             fatPerServing: 4,
             carbsPerServing: 0,
-            fiberPerServing: 0
+            fiberPerServing: 0,
+            micronutrientsPerServing: micros(
+                magnesium: 29.0,     // ATP production
+                zinc: 0.9,           // Protein synthesis
+                iron: 0.7,
+                potassium: 256.0,    // Muscle contraction
+                sodium: 63.0
+            )
         ),
         LibraryFood(
             name: "Sockeye Salmon (raw)",
@@ -295,7 +433,15 @@ enum BuiltInFoodLibrary {
             proteinPerServing: 27,
             fatPerServing: 11,
             carbsPerServing: 0,
-            fiberPerServing: 0
+            fiberPerServing: 0,
+            micronutrientsPerServing: micros(
+                magnesium: 29.0,     // Recovery
+                zinc: 0.6,
+                iron: 0.5,
+                potassium: 460.0,    // HIGH - prevents cramping
+                sodium: 59.0,
+                vitaminD: 16.3       // HIGH - hormone health
+            )
         ),
         LibraryFood(
             name: "93/7 Ground Beef (raw)",
@@ -304,7 +450,14 @@ enum BuiltInFoodLibrary {
             proteinPerServing: 22,
             fatPerServing: 7,
             carbsPerServing: 0,
-            fiberPerServing: 0
+            fiberPerServing: 0,
+            micronutrientsPerServing: micros(
+                magnesium: 21.0,
+                zinc: 6.3,           // HIGH - testosterone support
+                iron: 2.5,           // HIGH - oxygen transport
+                potassium: 330.0,
+                sodium: 66.0
+            )
         ),
         LibraryFood(
             name: "Strip Steak (raw)",

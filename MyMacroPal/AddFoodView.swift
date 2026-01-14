@@ -15,6 +15,7 @@ struct LibraryFood: Identifiable, Codable, Equatable, Hashable {
     var fatPerServing: Double
     var carbsPerServing: Double
     var fiberPerServing: Double
+    var micronutrientsPerServing: MicronutrientData?
     var createdAt: Date
     var updatedAt: Date
 
@@ -26,7 +27,8 @@ struct LibraryFood: Identifiable, Codable, Equatable, Hashable {
         proteinPerServing: Double,
         fatPerServing: Double,
         carbsPerServing: Double,
-        fiberPerServing: Double
+        fiberPerServing: Double,
+        micronutrientsPerServing: MicronutrientData? = nil
     ) {
         self.id = id
         self.name = name
@@ -36,6 +38,7 @@ struct LibraryFood: Identifiable, Codable, Equatable, Hashable {
         self.fatPerServing = fatPerServing
         self.carbsPerServing = carbsPerServing
         self.fiberPerServing = fiberPerServing
+        self.micronutrientsPerServing = micronutrientsPerServing
         self.createdAt = Date()
         self.updatedAt = Date()
     }
@@ -50,6 +53,18 @@ struct LibraryFood: Identifiable, Codable, Equatable, Hashable {
             carbs: carbsPerServing * factor,
             fiber: fiberPerServing * factor
         )
+    }
+    
+    func micronutrientsFor(grams: Double) -> MicronutrientData {
+        guard let micros = micronutrientsPerServing else { return MicronutrientData() }
+        let safeServingGrams = max(gramsPerServing, 0.00001)
+        let factor = grams / safeServingGrams
+        
+        var scaled = MicronutrientData()
+        for nutrient in Micronutrient.allCases {
+            scaled[nutrient] = micros[nutrient] * factor
+        }
+        return scaled
     }
 }
 
@@ -401,6 +416,7 @@ struct BuiltInFoodUseSheet: View {
         entry.quantityGrams = grams
         entry.source = "built-in"
         entry.date = targetDate ?? Date()
+        entry.micronutrients = food.micronutrientsFor(grams: grams)
         do { try viewContext.save() } catch { print("Save error: \(error)") }
     }
 
@@ -644,6 +660,7 @@ struct LibraryFoodUseSheet: View {
         entry.quantityGrams = grams
         entry.source = "library"
         entry.date = targetDate ?? Date()
+        entry.micronutrients = food.micronutrientsFor(grams: grams)
         do { try viewContext.save() } catch { print("Save error: \(error)") }
     }
 }
