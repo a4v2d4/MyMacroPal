@@ -294,7 +294,7 @@ enum MicronutrientCategory: String, CaseIterable, Identifiable, Codable {
 }
 
 // MARK: - Micronutrient Data Structure
-struct MicronutrientData: Codable, Equatable {
+struct MicronutrientData: Codable, Equatable, Hashable {
     /// Stored as milligrams (mg) for consistency. All conversions handled through Measurement API
     private(set) var values: [String: Double] = [:]
     
