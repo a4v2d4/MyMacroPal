@@ -1,10 +1,17 @@
 import Foundation
+import HealthKit
+
+// MARK: - Nutrient Units
+extension UnitMass {
+    /// Micrograms (mcg or μg)
+    static let micrograms = UnitMass(symbol: "mcg", converter: UnitConverterLinear(coefficient: 0.000001))
+}
 
 // MARK: - Micronutrient Definition
-enum Micronutrient: String, CaseIterable, Identifiable {
+enum Micronutrient: String, CaseIterable, Identifiable, Codable {
     var id: String { rawValue }
     
-    // Vitamins
+    // MARK: - Vitamins
     case vitaminA = "Vitamin A"
     case vitaminC = "Vitamin C"
     case vitaminD = "Vitamin D"
@@ -21,7 +28,7 @@ enum Micronutrient: String, CaseIterable, Identifiable {
     case vitaminB12 = "Vitamin B12"
     case choline = "Choline"
     
-    // Minerals
+    // MARK: - Minerals
     case calcium = "Calcium"
     case chromium = "Chromium"
     case copper = "Copper"
@@ -36,7 +43,7 @@ enum Micronutrient: String, CaseIterable, Identifiable {
     case sodium = "Sodium"
     case zinc = "Zinc"
     
-    // Other nutrients
+    // MARK: - Other Nutrients
     case omega3 = "Omega-3"
     case omega6 = "Omega-6"
     case saturatedFat = "Saturated Fat"
@@ -44,75 +51,140 @@ enum Micronutrient: String, CaseIterable, Identifiable {
     case cholesterol = "Cholesterol"
     case sugar = "Sugar"
     
+    // MARK: - Properties
+    
     var category: MicronutrientCategory {
         switch self {
-        case .vitaminA, .vitaminC, .vitaminD, .vitaminE, .vitaminK1, .vitaminK2, .thiamin, .riboflavin, .niacin, .pantothenicAcid, .vitaminB6, .biotin, .folate, .vitaminB12, .choline:
+        case .vitaminA, .vitaminC, .vitaminD, .vitaminE, .vitaminK1, .vitaminK2,
+             .thiamin, .riboflavin, .niacin, .pantothenicAcid, .vitaminB6, .biotin,
+             .folate, .vitaminB12, .choline:
             return .vitamins
-        case .calcium, .chromium, .copper, .iodine, .iron, .magnesium, .manganese, .molybdenum, .phosphorus, .potassium, .selenium, .sodium, .zinc:
+            
+        case .calcium, .chromium, .copper, .iodine, .iron, .magnesium, .manganese,
+             .molybdenum, .phosphorus, .potassium, .selenium, .sodium, .zinc:
             return .minerals
+            
         case .omega3, .omega6, .saturatedFat, .transFat, .cholesterol, .sugar:
             return .other
         }
     }
     
-    /// Daily Value (DV) based on FDA standards for adults
-    var dailyValue: Double {
+    /// The unit type for this nutrient using Swift's Measurement framework
+    var measurementUnit: Dimension {
         switch self {
-        // Vitamins (in various units - stored as base units)
-        case .vitaminA: return 900 // mcg RAE
-        case .vitaminC: return 90 // mg
-        case .vitaminD: return 20 // mcg (800 IU)
-        case .vitaminE: return 15 // mg
-        case .vitaminK1: return 120 // mcg (phylloquinone)
-        case .vitaminK2: return 90 // mcg (menaquinone, optimal for bone/cardiovascular health)
-        case .thiamin: return 1.2 // mg
-        case .riboflavin: return 1.3 // mg
-        case .niacin: return 16 // mg
-        case .pantothenicAcid: return 5 // mg
-        case .vitaminB6: return 1.7 // mg
-        case .biotin: return 30 // mcg
-        case .folate: return 400 // mcg DFE
-        case .vitaminB12: return 2.4 // mcg
-        case .choline: return 550 // mg
+        // Micrograms (mcg)
+        case .vitaminA, .vitaminD, .vitaminK1, .vitaminK2, .biotin, .folate, .vitaminB12,
+             .chromium, .iodine, .molybdenum, .selenium:
+            return UnitMass.micrograms
             
-        // Minerals
-        case .calcium: return 1300 // mg
-        case .chromium: return 35 // mcg (glucose metabolism, insulin sensitivity)
-        case .copper: return 0.9 // mg
-        case .iodine: return 150 // mcg (thyroid function)
-        case .iron: return 18 // mg
-        case .magnesium: return 420 // mg
-        case .manganese: return 2.3 // mg
-        case .molybdenum: return 45 // mcg (enzyme cofactor)
-        case .phosphorus: return 1250 // mg
-        case .potassium: return 4700 // mg
-        case .selenium: return 55 // mcg
-        case .sodium: return 2300 // mg
-        case .zinc: return 11 // mg
+        // Milligrams (mg)
+        case .vitaminC, .vitaminE, .thiamin, .riboflavin, .niacin, .pantothenicAcid,
+             .vitaminB6, .choline, .calcium, .copper, .iron, .magnesium, .manganese,
+             .phosphorus, .potassium, .sodium, .zinc, .omega3, .omega6, .cholesterol:
+            return UnitMass.milligrams
             
-        // Other nutrients
-        case .omega3: return 1600 // mg (ALA)
-        case .omega6: return 17000 // mg (linoleic acid)
-        case .saturatedFat: return 20 // g (limit, not goal)
-        case .transFat: return 0 // g (limit)
-        case .cholesterol: return 300 // mg (limit)
-        case .sugar: return 50 // g (limit, based on 10% of 2000 cal)
-        }
-    }
-    
-    var unit: String {
-        switch self {
-        case .vitaminA, .vitaminD, .vitaminK1, .vitaminK2, .biotin, .folate, .vitaminB12, .chromium, .iodine, .molybdenum, .selenium:
-            return "mcg"
-        case .vitaminC, .vitaminE, .thiamin, .riboflavin, .niacin, .pantothenicAcid, .vitaminB6, .choline,
-             .calcium, .copper, .iron, .magnesium, .manganese, .phosphorus, .potassium, .sodium, .zinc,
-             .omega3, .omega6, .cholesterol:
-            return "mg"
+        // Grams (g)
         case .saturatedFat, .transFat, .sugar:
-            return "g"
+            return UnitMass.grams
         }
     }
     
+    /// Daily Value (DV) based on FDA standards for adults
+    var dailyValueMeasurement: Measurement<UnitMass> {
+        switch self {
+        // Vitamins - Micrograms
+        case .vitaminA:
+            return Measurement(value: 900, unit: .micrograms)
+        case .vitaminD:
+            return Measurement(value: 20, unit: .micrograms)
+        case .vitaminK1:
+            return Measurement(value: 120, unit: .micrograms)
+        case .vitaminK2:
+            return Measurement(value: 90, unit: .micrograms)
+        case .biotin:
+            return Measurement(value: 30, unit: .micrograms)
+        case .folate:
+            return Measurement(value: 400, unit: .micrograms)
+        case .vitaminB12:
+            return Measurement(value: 2.4, unit: .micrograms)
+            
+        // Vitamins - Milligrams
+        case .vitaminC:
+            return Measurement(value: 90, unit: .milligrams)
+        case .vitaminE:
+            return Measurement(value: 15, unit: .milligrams)
+        case .thiamin:
+            return Measurement(value: 1.2, unit: .milligrams)
+        case .riboflavin:
+            return Measurement(value: 1.3, unit: .milligrams)
+        case .niacin:
+            return Measurement(value: 16, unit: .milligrams)
+        case .pantothenicAcid:
+            return Measurement(value: 5, unit: .milligrams)
+        case .vitaminB6:
+            return Measurement(value: 1.7, unit: .milligrams)
+        case .choline:
+            return Measurement(value: 550, unit: .milligrams)
+            
+        // Minerals - Micrograms
+        case .chromium:
+            return Measurement(value: 35, unit: .micrograms)
+        case .iodine:
+            return Measurement(value: 150, unit: .micrograms)
+        case .molybdenum:
+            return Measurement(value: 45, unit: .micrograms)
+        case .selenium:
+            return Measurement(value: 55, unit: .micrograms)
+            
+        // Minerals - Milligrams
+        case .calcium:
+            return Measurement(value: 1300, unit: .milligrams)
+        case .copper:
+            return Measurement(value: 0.9, unit: .milligrams)
+        case .iron:
+            return Measurement(value: 18, unit: .milligrams)
+        case .magnesium:
+            return Measurement(value: 420, unit: .milligrams)
+        case .manganese:
+            return Measurement(value: 2.3, unit: .milligrams)
+        case .phosphorus:
+            return Measurement(value: 1250, unit: .milligrams)
+        case .potassium:
+            return Measurement(value: 4700, unit: .milligrams)
+        case .sodium:
+            return Measurement(value: 2300, unit: .milligrams)
+        case .zinc:
+            return Measurement(value: 11, unit: .milligrams)
+            
+        // Other - Milligrams
+        case .omega3:
+            return Measurement(value: 1600, unit: .milligrams)
+        case .omega6:
+            return Measurement(value: 17000, unit: .milligrams)
+        case .cholesterol:
+            return Measurement(value: 300, unit: .milligrams)
+            
+        // Other - Grams
+        case .saturatedFat:
+            return Measurement(value: 20, unit: .grams)
+        case .transFat:
+            return Measurement(value: 0, unit: .grams)
+        case .sugar:
+            return Measurement(value: 50, unit: .grams)
+        }
+    }
+    
+    /// Legacy daily value as Double for backward compatibility
+    var dailyValue: Double {
+        return dailyValueMeasurement.converted(to: measurementUnit as! UnitMass).value
+    }
+    
+    /// Unit symbol for display (mcg, mg, g)
+    var unit: String {
+        measurementUnit.symbol
+    }
+    
+    /// Whether this nutrient is a "limit" rather than a goal
     var isLimitNutrient: Bool {
         switch self {
         case .saturatedFat, .transFat, .cholesterol, .sugar, .sodium:
@@ -121,166 +193,321 @@ enum Micronutrient: String, CaseIterable, Identifiable {
             return false
         }
     }
+    
+    /// HealthKit quantity type identifier for syncing with Apple Health
+    @available(iOS 8.0, *)
+    var healthKitIdentifier: HKQuantityTypeIdentifier? {
+        switch self {
+        // Vitamins
+        case .vitaminA: return .dietaryVitaminA
+        case .vitaminC: return .dietaryVitaminC
+        case .vitaminD: return .dietaryVitaminD
+        case .vitaminE: return .dietaryVitaminE
+        case .vitaminK1, .vitaminK2: return .dietaryVitaminK
+        case .thiamin: return .dietaryThiamin
+        case .riboflavin: return .dietaryRiboflavin
+        case .niacin: return .dietaryNiacin
+        case .pantothenicAcid: return .dietaryPantothenicAcid
+        case .vitaminB6: return .dietaryVitaminB6
+        case .biotin: return .dietaryBiotin
+        case .folate: return .dietaryFolate
+        case .vitaminB12: return .dietaryVitaminB12
+            
+        // Minerals
+        case .calcium: return .dietaryCalcium
+        case .chromium: return .dietaryChromium
+        case .copper: return .dietaryCopper
+        case .iodine: return .dietaryIodine
+        case .iron: return .dietaryIron
+        case .magnesium: return .dietaryMagnesium
+        case .manganese: return .dietaryManganese
+        case .molybdenum: return .dietaryMolybdenum
+        case .phosphorus: return .dietaryPhosphorus
+        case .potassium: return .dietaryPotassium
+        case .selenium: return .dietarySelenium
+        case .sodium: return .dietarySodium
+        case .zinc: return .dietaryZinc
+            
+        // Other nutrients
+        case .cholesterol: return .dietaryCholesterol
+        case .sugar: return .dietarySugar
+            
+        // No direct HealthKit mapping
+        case .choline, .omega3, .omega6, .saturatedFat, .transFat:
+            return nil
+        }
+    }
+    
+    /// Create a HealthKit quantity from a measurement
+    @available(iOS 8.0, *)
+    func createHealthKitQuantity(from measurement: Measurement<UnitMass>) -> HKQuantity? {
+        guard let identifier = healthKitIdentifier else { return nil }
+        
+        // Convert to HealthKit's expected unit
+        let hkUnit: HKUnit
+        if measurementUnit == UnitMass.micrograms {
+            hkUnit = .gramUnit(with: .micro)
+        } else if measurementUnit == UnitMass.milligrams {
+            hkUnit = .gramUnit(with: .milli)
+        } else {
+            hkUnit = .gram()
+        }
+        
+        let convertedValue = measurement.converted(to: measurementUnit as! UnitMass).value
+        return HKQuantity(unit: hkUnit, doubleValue: convertedValue)
+    }
+    
+    /// Metabolic role description for body recomposition
+    var metabolicRole: String {
+        switch self {
+        case .chromium:
+            return "Glucose metabolism, insulin sensitivity, nutrient partitioning"
+        case .iodine:
+            return "Thyroid function, metabolic rate regulation"
+        case .molybdenum:
+            return "Amino acid metabolism, protein synthesis"
+        case .vitaminK2:
+            return "Bone health, calcium metabolism, cardiovascular function"
+        case .biotin:
+            return "Protein synthesis, fat metabolism, energy production"
+        case .choline:
+            return "Liver function, fat metabolism, prevents fatty liver"
+        case .vitaminD:
+            return "Calcium absorption, bone health, immune function, testosterone"
+        case .magnesium:
+            return "Protein synthesis, muscle function, energy production"
+        case .zinc:
+            return "Testosterone production, protein synthesis, immune function"
+        default:
+            return ""
+        }
+    }
 }
 
-enum MicronutrientCategory: String, CaseIterable {
+// MARK: - Category
+enum MicronutrientCategory: String, CaseIterable, Identifiable, Codable {
     case vitamins = "Vitamins"
     case minerals = "Minerals"
     case other = "Other Nutrients"
+    
+    var id: String { rawValue }
 }
 
 // MARK: - Micronutrient Data Structure
-struct MicronutrientData: Codable {
-    var values: [String: Double] = [:]
+struct MicronutrientData: Codable, Equatable {
+    /// Stored as milligrams (mg) for consistency. All conversions handled through Measurement API
+    private(set) var values: [String: Double] = [:]
     
+    // MARK: - Subscript Access
+    
+    /// Get/set nutrient value as raw double (in the nutrient's native unit)
     subscript(nutrient: Micronutrient) -> Double {
         get { values[nutrient.rawValue] ?? 0 }
         set { values[nutrient.rawValue] = newValue }
     }
     
-    func percentage(for nutrient: Micronutrient) -> Double {
-        let value = self[nutrient]
-        guard nutrient.dailyValue > 0 else { return 0 }
-        return (value / nutrient.dailyValue) * 100
+    /// Get/set nutrient value as Measurement for type safety
+    subscript(measurement nutrient: Micronutrient) -> Measurement<UnitMass> {
+        get {
+            let value = values[nutrient.rawValue] ?? 0
+            return Measurement(value: value, unit: nutrient.measurementUnit as! UnitMass)
+        }
+        set {
+            let converted = newValue.converted(to: nutrient.measurementUnit as! UnitMass)
+            values[nutrient.rawValue] = converted.value
+        }
     }
+    
+    // MARK: - Calculations
+    
+    /// Calculate percentage of daily value for a nutrient
+    func percentage(for nutrient: Micronutrient) -> Double {
+        let currentValue = self[measurement: nutrient]
+        let dailyValue = nutrient.dailyValueMeasurement
+        
+        // Convert both to same unit for comparison
+        let currentInDVUnit = currentValue.converted(to: dailyValue.unit)
+        guard dailyValue.value > 0 else { return 0 }
+        
+        return (currentInDVUnit.value / dailyValue.value) * 100
+    }
+    
+    /// Get all non-zero nutrients
+    func nonZeroNutrients() -> [Micronutrient] {
+        Micronutrient.allCases.filter { self[$0] > 0 }
+    }
+    
+    // MARK: - Operators
     
     static func + (lhs: MicronutrientData, rhs: MicronutrientData) -> MicronutrientData {
         var result = MicronutrientData()
         let allKeys = Set(lhs.values.keys).union(rhs.values.keys)
+        
         for key in allKeys {
             result.values[key] = (lhs.values[key] ?? 0) + (rhs.values[key] ?? 0)
         }
+        
         return result
+    }
+    
+    static func += (lhs: inout MicronutrientData, rhs: MicronutrientData) {
+        for (key, value) in rhs.values {
+            lhs.values[key] = (lhs.values[key] ?? 0) + value
+        }
+    }
+    
+    // MARK: - HealthKit Integration
+    
+    /// Create HealthKit samples for all tracked nutrients
+    @available(iOS 8.0, *)
+    func createHealthKitSamples(startDate: Date, endDate: Date) -> [(HKQuantityType, HKQuantitySample)] {
+        var samples: [(HKQuantityType, HKQuantitySample)] = []
+        
+        for nutrient in Micronutrient.allCases {
+            guard let identifier = nutrient.healthKitIdentifier,
+                  let quantityType = HKQuantityType.quantityType(forIdentifier: identifier),
+                  self[nutrient] > 0 else {
+                continue
+            }
+            
+            let measurement = self[measurement: nutrient]
+            if let quantity = nutrient.createHealthKitQuantity(from: measurement) {
+                let sample = HKQuantitySample(
+                    type: quantityType,
+                    quantity: quantity,
+                    start: startDate,
+                    end: endDate
+                )
+                samples.append((quantityType, sample))
+            }
+        }
+        
+        return samples
     }
 }
 
 // MARK: - USDA Nutrient Mapping
 struct USDANutrientMapper {
-    /// Maps USDA nutrient IDs and names to our Micronutrient enum
-    /// Based on USDA FoodData Central nutrient database
-    static func mapNutrient(_ usdaNutrient: USDANutrient) -> (Micronutrient, Double)? {
+    /// Maps USDA nutrient names to our Micronutrient enum with proper unit conversion
+    static func mapNutrient(_ usdaNutrient: USDANutrient) -> (Micronutrient, Measurement<UnitMass>)? {
         let name = usdaNutrient.nutrientName.lowercased()
         let value = usdaNutrient.value ?? 0
-        let unit = usdaNutrient.unitName?.uppercased() ?? ""
+        guard value > 0 else { return nil }
         
-        // Vitamins
-        if name.contains("vitamin a") || name.contains("retinol") {
-            return (.vitaminA, convertToMcg(value, from: unit))
-        } else if name.contains("vitamin c") || name.contains("ascorbic acid") {
-            return (.vitaminC, convertToMg(value, from: unit))
-        } else if name.contains("vitamin d") || name.contains("cholecalciferol") {
-            return (.vitaminD, convertToMcg(value, from: unit))
-        } else if name.contains("vitamin e") || name.contains("alpha-tocopherol") {
-            return (.vitaminE, convertToMg(value, from: unit))
-        } else if name.contains("menaquinone") || name.contains("vitamin k2") || name.contains("mk-") {
-            return (.vitaminK2, convertToMcg(value, from: unit))
-        } else if name.contains("phylloquinone") || name.contains("vitamin k1") || (name.contains("vitamin k") && !name.contains("menaquinone")) {
-            return (.vitaminK1, convertToMcg(value, from: unit))
-        } else if name.contains("thiamin") || name == "vitamin b-1" {
-            return (.thiamin, convertToMg(value, from: unit))
-        } else if name.contains("riboflavin") || name == "vitamin b-2" {
-            return (.riboflavin, convertToMg(value, from: unit))
-        } else if name.contains("niacin") || name == "vitamin b-3" {
-            return (.niacin, convertToMg(value, from: unit))
-        } else if name.contains("pantothenic") {
-            return (.pantothenicAcid, convertToMg(value, from: unit))
-        } else if name.contains("vitamin b-6") || name.contains("pyridoxine") {
-            return (.vitaminB6, convertToMg(value, from: unit))
-        } else if name.contains("biotin") {
-            return (.biotin, convertToMcg(value, from: unit))
-        } else if name.contains("folate") || name.contains("folic acid") {
-            return (.folate, convertToMcg(value, from: unit))
-        } else if name.contains("vitamin b-12") || name.contains("cobalamin") {
-            return (.vitaminB12, convertToMcg(value, from: unit))
-        } else if name.contains("choline") {
-            return (.choline, convertToMg(value, from: unit))
+        let unitName = usdaNutrient.unitName?.uppercased() ?? ""
+        
+        // Determine source unit
+        let sourceUnit: UnitMass
+        switch unitName {
+        case "G": sourceUnit = .grams
+        case "MG": sourceUnit = .milligrams
+        case "UG", "MCG", "µG": sourceUnit = .micrograms
+        case "IU": sourceUnit = .micrograms // Approximate conversion
+        default: sourceUnit = .milligrams
         }
-        // Minerals
-        else if name.contains("calcium") && !name.contains("pantothen") {
-            return (.calcium, convertToMg(value, from: unit))
-        } else if name.contains("chromium") {
-            return (.chromium, convertToMcg(value, from: unit))
-        } else if name.contains("copper") {
-            return (.copper, convertToMg(value, from: unit))
-        } else if name.contains("iodine") {
-            return (.iodine, convertToMcg(value, from: unit))
-        } else if name.contains("iron") {
-            return (.iron, convertToMg(value, from: unit))
-        } else if name.contains("magnesium") {
-            return (.magnesium, convertToMg(value, from: unit))
-        } else if name.contains("manganese") {
-            return (.manganese, convertToMg(value, from: unit))
-        } else if name.contains("molybdenum") {
-            return (.molybdenum, convertToMcg(value, from: unit))
-        } else if name.contains("phosphorus") {
-            return (.phosphorus, convertToMg(value, from: unit))
-        } else if name.contains("potassium") {
-            return (.potassium, convertToMg(value, from: unit))
-        } else if name.contains("selenium") {
-            return (.selenium, convertToMcg(value, from: unit))
-        } else if name.contains("sodium") {
-            return (.sodium, convertToMg(value, from: unit))
-        } else if name.contains("zinc") {
-            return (.zinc, convertToMg(value, from: unit))
-        }
-        // Other nutrients
-        else if name.contains("fatty acids, total omega-3") || name.contains("18:3") {
-            return (.omega3, convertToMg(value, from: unit))
-        } else if name.contains("fatty acids, total omega-6") || name.contains("18:2") {
-            return (.omega6, convertToMg(value, from: unit))
-        } else if name.contains("fatty acids, total saturated") {
-            return (.saturatedFat, convertToG(value, from: unit))
-        } else if name.contains("fatty acids, total trans") {
-            return (.transFat, convertToG(value, from: unit))
-        } else if name.contains("cholesterol") {
-            return (.cholesterol, convertToMg(value, from: unit))
-        } else if name.contains("sugars, total") || name == "sugars, added" {
-            return (.sugar, convertToG(value, from: unit))
+        
+        // Identify nutrient and return with measurement
+        if let nutrient = identifyNutrient(from: name) {
+            let measurement = Measurement(value: value, unit: sourceUnit)
+            return (nutrient, measurement)
         }
         
         return nil
     }
     
-    // Unit conversion helpers
-    private static func convertToMcg(_ value: Double, from unit: String) -> Double {
-        switch unit {
-        case "UG", "MCG": return value
-        case "MG": return value * 1000
-        case "G": return value * 1_000_000
-        case "IU": return value * 0.3 // Approximate for vitamin A/D
-        default: return value
+    private static func identifyNutrient(from name: String) -> Micronutrient? {
+        // Vitamins
+        if name.contains("vitamin a") || name.contains("retinol") {
+            return .vitaminA
+        } else if name.contains("vitamin c") || name.contains("ascorbic acid") {
+            return .vitaminC
+        } else if name.contains("vitamin d") || name.contains("cholecalciferol") {
+            return .vitaminD
+        } else if name.contains("vitamin e") || name.contains("alpha-tocopherol") {
+            return .vitaminE
+        } else if name.contains("menaquinone") || name.contains("vitamin k2") || name.contains("mk-") {
+            return .vitaminK2
+        } else if name.contains("phylloquinone") || name.contains("vitamin k1") || (name.contains("vitamin k") && !name.contains("menaquinone")) {
+            return .vitaminK1
+        } else if name.contains("thiamin") || name == "vitamin b-1" {
+            return .thiamin
+        } else if name.contains("riboflavin") || name == "vitamin b-2" {
+            return .riboflavin
+        } else if name.contains("niacin") || name == "vitamin b-3" {
+            return .niacin
+        } else if name.contains("pantothenic") {
+            return .pantothenicAcid
+        } else if name.contains("vitamin b-6") || name.contains("pyridoxine") {
+            return .vitaminB6
+        } else if name.contains("biotin") {
+            return .biotin
+        } else if name.contains("folate") || name.contains("folic acid") {
+            return .folate
+        } else if name.contains("vitamin b-12") || name.contains("cobalamin") {
+            return .vitaminB12
+        } else if name.contains("choline") {
+            return .choline
         }
-    }
-    
-    private static func convertToMg(_ value: Double, from unit: String) -> Double {
-        switch unit {
-        case "MG": return value
-        case "G": return value * 1000
-        case "UG", "MCG": return value / 1000
-        default: return value
+        // Minerals
+        else if name.contains("calcium") && !name.contains("pantothen") {
+            return .calcium
+        } else if name.contains("chromium") {
+            return .chromium
+        } else if name.contains("copper") {
+            return .copper
+        } else if name.contains("iodine") {
+            return .iodine
+        } else if name.contains("iron") {
+            return .iron
+        } else if name.contains("magnesium") {
+            return .magnesium
+        } else if name.contains("manganese") {
+            return .manganese
+        } else if name.contains("molybdenum") {
+            return .molybdenum
+        } else if name.contains("phosphorus") {
+            return .phosphorus
+        } else if name.contains("potassium") {
+            return .potassium
+        } else if name.contains("selenium") {
+            return .selenium
+        } else if name.contains("sodium") {
+            return .sodium
+        } else if name.contains("zinc") {
+            return .zinc
         }
-    }
-    
-    private static func convertToG(_ value: Double, from unit: String) -> Double {
-        switch unit {
-        case "G": return value
-        case "MG": return value / 1000
-        case "UG", "MCG": return value / 1_000_000
-        default: return value
+        // Other nutrients
+        else if name.contains("fatty acids, total omega-3") || name.contains("18:3") {
+            return .omega3
+        } else if name.contains("fatty acids, total omega-6") || name.contains("18:2") {
+            return .omega6
+        } else if name.contains("fatty acids, total saturated") {
+            return .saturatedFat
+        } else if name.contains("fatty acids, total trans") {
+            return .transFat
+        } else if name.contains("cholesterol") {
+            return .cholesterol
+        } else if name.contains("sugars, total") || name == "sugars, added" {
+            return .sugar
         }
+        
+        return nil
     }
 }
 
 // MARK: - Extension for USDAFood
 extension USDAFood {
+    /// Extract micronutrients using Measurement API for type safety
     func extractMicronutrients() -> MicronutrientData {
         var data = MicronutrientData()
         
         guard let nutrients = foodNutrients else { return data }
         
         for nutrient in nutrients {
-            if let (micronutrient, value) = USDANutrientMapper.mapNutrient(nutrient) {
-                data[micronutrient] = value
+            if let (micronutrient, measurement) = USDANutrientMapper.mapNutrient(nutrient) {
+                // Convert measurement to the nutrient's native unit and store
+                let converted = measurement.converted(to: micronutrient.measurementUnit as! UnitMass)
+                data[micronutrient] = converted.value
             }
         }
         

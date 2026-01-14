@@ -4,14 +4,27 @@
 
 Added comprehensive micronutrient tracking to MyMacroPal, similar to Cronometer's implementation, with Daily Value (DV%) percentages for vitamins, minerals, and other nutrients.
 
-### Enhanced: Body Recomposition Focus (v1.1)
+### Version History
 
+#### v1.2 - Architectural Best Practices (Current)
+**Major refactoring** following Swift and iOS best practices:
+- **Measurement API Integration**: Type-safe unit handling using Foundation's `Measurement<UnitMass>`
+- **HealthKit Integration**: Native Apple Health sync with automatic unit conversion
+- **Enhanced Architecture**: CaseIterable enums, computed properties, protocol-oriented design
+- **See**: `ARCHITECTURE_BEST_PRACTICES.md` for complete details
+
+#### v1.1 - Body Recomposition Focus
 Enhanced to include often-overlooked micronutrients essential for body recomposition:
-
 - **Added Chromium**: Glucose metabolism and insulin sensitivity
 - **Added Iodine**: Thyroid function and metabolic rate
 - **Added Molybdenum**: Enzyme function and amino acid metabolism
 - **Split Vitamin K**: Now tracks K1 (Phylloquinone) and K2 (Menaquinone) separately, as they have distinct metabolic roles
+
+#### v1.0 - Initial Implementation
+- 30+ micronutrients tracked
+- USDA API integration
+- Daily Value (DV%) tracking
+- UI components with progress bars
 
 ## What Was Added
 
@@ -324,7 +337,11 @@ Compatible with USDA FoodData Central API v1:
 ---
 
 **Implementation Date**: January 2026  
-**Version**: 1.1.0  
+**Version**: 1.2.0  
 **Based on**: Cronometer's micronutrient tracking model  
 **Standards**: FDA Daily Value recommendations (2020)  
-**Enhancement**: Added body recomposition-focused micronutrients (Chromium, Iodine, Molybdenum) and split Vitamin K into K1/K2
+**Architecture**: Swift best practices with Measurement API and HealthKit integration  
+**Enhancements**: 
+- v1.2: Measurement API, HealthKit mapping, architectural refactoring
+- v1.1: Body recomposition micronutrients (Chromium, Iodine, Molybdenum, K1/K2 split)
+- v1.0: Initial 30+ micronutrients with DV% tracking
