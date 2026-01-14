@@ -7,7 +7,14 @@
       "proteinPerServing": 0,
       "fatPerServing": 13,
       "carbsPerServing": 0,
-      "fiberPerServing": 0
+      "fiberPerServing": 0,
+      "micronutrients": {
+        "magnesium": 0.0,
+        "zinc": 0.0,
+        "iron": 0.0,
+        "potassium": 0.1,
+        "sodium": 0.0
+      }
     },
     {
       "name": "Low Fat Greek Yogurt",
@@ -31,7 +38,14 @@
       "proteinPerServing": 3,
       "fatPerServing": 1,
       "carbsPerServing": 14,
-      "fiberPerServing": 3
+      "fiberPerServing": 3,
+      "micronutrients": {
+        "magnesium": 22.0,
+        "zinc": 0.5,
+        "iron": 0.6,
+        "potassium": 60.0,
+        "sodium": 105.0
+      }
     },
     {
       "name": "Sourdough Bread",
@@ -40,7 +54,14 @@
       "proteinPerServing": 4,
       "fatPerServing": 1,
       "carbsPerServing": 22,
-      "fiberPerServing": 0
+      "fiberPerServing": 0,
+      "micronutrients": {
+        "magnesium": 12.0,
+        "zinc": 0.4,
+        "iron": 1.5,
+        "potassium": 53.0,
+        "sodium": 200.0
+      }
     },
     {
       "name": "White Rice (Uncooked)",
@@ -49,7 +70,14 @@
       "proteinPerServing": 12,
       "fatPerServing": 1.9,
       "carbsPerServing": 144,
-      "fiberPerServing": 2
+      "fiberPerServing": 2,
+      "micronutrients": {
+        "magnesium": 46.0,
+        "zinc": 2.0,
+        "iron": 8.0,
+        "potassium": 213.0,
+        "sodium": 9.0
+      }
     },
     {
       "name": "White Rice (Cooked)",
@@ -58,7 +86,14 @@
       "proteinPerServing": 4.3,
       "fatPerServing": 0.44,
       "carbsPerServing": 44.5,
-      "fiberPerServing": 0.6
+      "fiberPerServing": 0.6,
+      "micronutrients": {
+        "magnesium": 19.0,
+        "zinc": 0.8,
+        "iron": 1.9,
+        "potassium": 55.0,
+        "sodium": 2.0
+      }
     },
     {
       "name": "Organic No Stir Crunchy Dark Roasted Peanut Butter",
@@ -67,7 +102,14 @@
       "proteinPerServing": 8,
       "fatPerServing": 17,
       "carbsPerServing": 5,
-      "fiberPerServing": 3
+      "fiberPerServing": 3,
+      "micronutrients": {
+        "magnesium": 51.0,
+        "zinc": 0.9,
+        "iron": 0.6,
+        "potassium": 214.0,
+        "sodium": 50.0
+      }
     },
     {
       "name": "Honey",
@@ -76,7 +118,14 @@
       "proteinPerServing": 0,
       "fatPerServing": 0,
       "carbsPerServing": 17,
-      "fiberPerServing": 0
+      "fiberPerServing": 0,
+      "micronutrients": {
+        "magnesium": 0.4,
+        "zinc": 0.1,
+        "iron": 0.1,
+        "potassium": 11.0,
+        "sodium": 1.0
+      }
     },
     {
       "name": "Chia Seeds",
@@ -130,7 +179,14 @@
       "proteinPerServing": 14,
       "fatPerServing": 0,
       "carbsPerServing": 0,
-      "fiberPerServing": 0
+      "fiberPerServing": 0,
+      "micronutrients": {
+        "magnesium": 15.0,
+        "zinc": 1.0,
+        "iron": 0.7,
+        "potassium": 170.0,
+        "sodium": 500.0
+      }
     },
     {
       "name": "Whey Protein Shake Powder",
@@ -251,7 +307,14 @@
       "proteinPerServing": 1,
       "fatPerServing": 0,
       "carbsPerServing": 4,
-      "fiberPerServing": 1
+      "fiberPerServing": 1,
+      "micronutrients": {
+        "magnesium": 22.0,
+        "zinc": 0.4,
+        "iron": 0.4,
+        "potassium": 313.0,
+        "sodium": 10.0
+      }
     },
     {
       "name": "Asparagus (raw)",
@@ -260,7 +323,14 @@
       "proteinPerServing": 3,
       "fatPerServing": 0,
       "carbsPerServing": 5,
-      "fiberPerServing": 3
+      "fiberPerServing": 3,
+      "micronutrients": {
+        "magnesium": 19.0,
+        "zinc": 0.7,
+        "iron": 2.9,
+        "potassium": 271.0,
+        "sodium": 3.0
+      }
     },
     {
       "name": "Blueberries",
@@ -331,7 +401,14 @@
       "proteinPerServing": 1,
       "fatPerServing": 0,
       "carbsPerServing": 15,
-      "fiberPerServing": 3
+      "fiberPerServing": 3,
+      "micronutrients": {
+        "magnesium": 15.5,
+        "zinc": 0.1,
+        "iron": 0.2,
+        "potassium": 279.0,
+        "sodium": 0.0
+      }
     },
     {
       "name": "Red Seedless Grapes",
@@ -340,7 +417,14 @@
       "proteinPerServing": 1,
       "fatPerServing": 0,
       "carbsPerServing": 27,
-      "fiberPerServing": 1
+      "fiberPerServing": 1,
+      "micronutrients": {
+        "magnesium": 10.5,
+        "zinc": 0.1,
+        "iron": 0.5,
+        "potassium": 286.0,
+        "sodium": 3.0
+      }
     },
     {
       "name": "Avocado",
@@ -414,7 +498,14 @@
       "proteinPerServing": 26,
       "fatPerServing": 5,
       "carbsPerServing": 0,
-      "fiberPerServing": 0
+      "fiberPerServing": 0,
+      "micronutrients": {
+        "magnesium": 23.0,
+        "zinc": 4.6,
+        "iron": 1.8,
+        "potassium": 360.0,
+        "sodium": 54.0
+      }
     },
     {
       "name": "Chicken Thigh (Skinless, raw)",
@@ -423,7 +514,14 @@
       "proteinPerServing": 26,
       "fatPerServing": 11,
       "carbsPerServing": 0,
-      "fiberPerServing": 0
+      "fiberPerServing": 0,
+      "micronutrients": {
+        "magnesium": 26.0,
+        "zinc": 2.8,
+        "iron": 1.5,
+        "potassium": 259.0,
+        "sodium": 80.0
+      }
     },
     {
       "name": "Chicken Drumstick (Skinless, raw)",
@@ -432,7 +530,14 @@
       "proteinPerServing": 28,
       "fatPerServing": 6,
       "carbsPerServing": 0,
-      "fiberPerServing": 0
+      "fiberPerServing": 0,
+      "micronutrients": {
+        "magnesium": 24.0,
+        "zinc": 2.7,
+        "iron": 1.0,
+        "potassium": 320.0,
+        "sodium": 85.0
+      }
     },
     {
       "name": "Chicken Wing (Skinless, raw)",
@@ -441,7 +546,14 @@
       "proteinPerServing": 30,
       "fatPerServing": 8,
       "carbsPerServing": 0,
-      "fiberPerServing": 0
+      "fiberPerServing": 0,
+      "micronutrients": {
+        "magnesium": 22.0,
+        "zinc": 1.8,
+        "iron": 1.1,
+        "potassium": 230.0,
+        "sodium": 77.0
+      }
     }
   ]
 }
