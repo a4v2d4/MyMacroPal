@@ -85,10 +85,6 @@ struct HomeView: View {
                                 Text("View Micronutrients")
                                     .font(.subheadline)
                                     .fontWeight(.medium)
-                                Spacer()
-                                Image(systemName: "chevron.right")
-                                    .font(.caption)
-                                    .foregroundColor(.secondary)
                             }
                         }
                     } header: {
