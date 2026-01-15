@@ -105,51 +105,46 @@ struct MacroWidgetSmallView: View {
     var entry: MacroEntry
     
     var body: some View {
-        ZStack {
-            ContainerRelativeShape()
-                .fill(Color(UIColor.systemBackground))
-            
-            VStack(spacing: 6) {
-                // Top row: Calories (left) and Protein (right)
-                HStack(spacing: 6) {
-                    CircularProgressView(
-                        label: "Calories",
-                        value: entry.calories,
-                        goal: entry.goalCalories,
-                        color: .blue,
-                        size: .small
-                    )
-                    
-                    CircularProgressView(
-                        label: "Protein",
-                        value: entry.protein,
-                        goal: entry.goalProtein,
-                        color: .green,
-                        size: .small
-                    )
-                }
+        VStack(spacing: 6) {
+            // Top row: Calories (left) and Protein (right)
+            HStack(spacing: 6) {
+                CircularProgressView(
+                    label: "Calories",
+                    value: entry.calories,
+                    goal: entry.goalCalories,
+                    color: .blue,
+                    size: .small
+                )
                 
-                // Bottom row: Carbs (left) and Fat (right)
-                HStack(spacing: 6) {
-                    CircularProgressView(
-                        label: "Carbs",
-                        value: entry.carbs,
-                        goal: entry.goalCarbs,
-                        color: .purple,
-                        size: .small
-                    )
-                    
-                    CircularProgressView(
-                        label: "Fat",
-                        value: entry.fat,
-                        goal: entry.goalFat,
-                        color: .orange,
-                        size: .small
-                    )
-                }
+                CircularProgressView(
+                    label: "Protein",
+                    value: entry.protein,
+                    goal: entry.goalProtein,
+                    color: .green,
+                    size: .small
+                )
             }
-            .padding(12)
+            
+            // Bottom row: Carbs (left) and Fat (right)
+            HStack(spacing: 6) {
+                CircularProgressView(
+                    label: "Carbs",
+                    value: entry.carbs,
+                    goal: entry.goalCarbs,
+                    color: .purple,
+                    size: .small
+                )
+                
+                CircularProgressView(
+                    label: "Fat",
+                    value: entry.fat,
+                    goal: entry.goalFat,
+                    color: .orange,
+                    size: .small
+                )
+            }
         }
+        .padding(12)
     }
 }
 
@@ -158,19 +153,14 @@ struct CaloriesWidgetView: View {
     var entry: MacroEntry
     
     var body: some View {
-        ZStack {
-            ContainerRelativeShape()
-                .fill(Color(UIColor.systemBackground))
-            
-            CircularProgressView(
-                label: "Calories",
-                value: entry.calories,
-                goal: entry.goalCalories,
-                color: .blue,
-                size: .large
-            )
-            .padding(16)
-        }
+        CircularProgressView(
+            label: "Calories",
+            value: entry.calories,
+            goal: entry.goalCalories,
+            color: .blue,
+            size: .large
+        )
+        .padding(16)
     }
 }
 
@@ -179,19 +169,14 @@ struct ProteinWidgetView: View {
     var entry: MacroEntry
     
     var body: some View {
-        ZStack {
-            ContainerRelativeShape()
-                .fill(Color(UIColor.systemBackground))
-            
-            CircularProgressView(
-                label: "Protein",
-                value: entry.protein,
-                goal: entry.goalProtein,
-                color: .green,
-                size: .large
-            )
-            .padding(16)
-        }
+        CircularProgressView(
+            label: "Protein",
+            value: entry.protein,
+            goal: entry.goalProtein,
+            color: .green,
+            size: .large
+        )
+        .padding(16)
     }
 }
 
@@ -200,19 +185,14 @@ struct CarbsWidgetView: View {
     var entry: MacroEntry
     
     var body: some View {
-        ZStack {
-            ContainerRelativeShape()
-                .fill(Color(UIColor.systemBackground))
-            
-            CircularProgressView(
-                label: "Carbs",
-                value: entry.carbs,
-                goal: entry.goalCarbs,
-                color: .purple,
-                size: .large
-            )
-            .padding(16)
-        }
+        CircularProgressView(
+            label: "Carbs",
+            value: entry.carbs,
+            goal: entry.goalCarbs,
+            color: .purple,
+            size: .large
+        )
+        .padding(16)
     }
 }
 
@@ -221,19 +201,14 @@ struct FatWidgetView: View {
     var entry: MacroEntry
     
     var body: some View {
-        ZStack {
-            ContainerRelativeShape()
-                .fill(Color(UIColor.systemBackground))
-            
-            CircularProgressView(
-                label: "Fat",
-                value: entry.fat,
-                goal: entry.goalFat,
-                color: .orange,
-                size: .large
-            )
-            .padding(16)
-        }
+        CircularProgressView(
+            label: "Fat",
+            value: entry.fat,
+            goal: entry.goalFat,
+            color: .orange,
+            size: .large
+        )
+        .padding(16)
     }
 }
 
@@ -323,7 +298,7 @@ struct CircularProgressView: View {
                         .font(size.percentageFont)
                         .foregroundColor(color)
                     
-                    Text("\(Int(value))")
+                    Text("\(Int(value)) / \(Int(goal))")
                         .font(size.valueFont)
                         .foregroundColor(.secondary)
                 }
@@ -347,7 +322,13 @@ struct AllMacrosSmallWidget: Widget {
     
     var body: some WidgetConfiguration {
         StaticConfiguration(kind: kind, provider: MacroProvider()) { entry in
-            MacroWidgetSmallView(entry: entry)
+            if #available(iOS 17.0, *) {
+                MacroWidgetSmallView(entry: entry)
+                    .containerBackground(.fill.tertiary, for: .widget)
+            } else {
+                MacroWidgetSmallView(entry: entry)
+                    .background()
+            }
         }
         .configurationDisplayName("All Macros")
         .description("Track all macros with 1 compact widget")
@@ -361,7 +342,13 @@ struct CaloriesWidget: Widget {
     
     var body: some WidgetConfiguration {
         StaticConfiguration(kind: kind, provider: MacroProvider()) { entry in
-            CaloriesWidgetView(entry: entry)
+            if #available(iOS 17.0, *) {
+                CaloriesWidgetView(entry: entry)
+                    .containerBackground(.fill.tertiary, for: .widget)
+            } else {
+                CaloriesWidgetView(entry: entry)
+                    .background()
+            }
         }
         .configurationDisplayName("Calories")
         .description("Track daily calorie intake")
@@ -375,7 +362,13 @@ struct ProteinWidget: Widget {
     
     var body: some WidgetConfiguration {
         StaticConfiguration(kind: kind, provider: MacroProvider()) { entry in
-            ProteinWidgetView(entry: entry)
+            if #available(iOS 17.0, *) {
+                ProteinWidgetView(entry: entry)
+                    .containerBackground(.fill.tertiary, for: .widget)
+            } else {
+                ProteinWidgetView(entry: entry)
+                    .background()
+            }
         }
         .configurationDisplayName("Protein")
         .description("Track daily protein intake")
@@ -389,7 +382,13 @@ struct CarbsWidget: Widget {
     
     var body: some WidgetConfiguration {
         StaticConfiguration(kind: kind, provider: MacroProvider()) { entry in
-            CarbsWidgetView(entry: entry)
+            if #available(iOS 17.0, *) {
+                CarbsWidgetView(entry: entry)
+                    .containerBackground(.fill.tertiary, for: .widget)
+            } else {
+                CarbsWidgetView(entry: entry)
+                    .background()
+            }
         }
         .configurationDisplayName("Carbs")
         .description("Track daily carbohydrate intake")
@@ -403,7 +402,13 @@ struct FatWidget: Widget {
     
     var body: some WidgetConfiguration {
         StaticConfiguration(kind: kind, provider: MacroProvider()) { entry in
-            FatWidgetView(entry: entry)
+            if #available(iOS 17.0, *) {
+                FatWidgetView(entry: entry)
+                    .containerBackground(.fill.tertiary, for: .widget)
+            } else {
+                FatWidgetView(entry: entry)
+                    .background()
+            }
         }
         .configurationDisplayName("Fat")
         .description("Track daily fat intake")
