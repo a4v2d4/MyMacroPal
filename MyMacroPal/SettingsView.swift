@@ -152,6 +152,7 @@ struct MacroGoalRow: View {
                 .multilineTextAlignment(.trailing)
                 .frame(width: 80)
                 .textFieldStyle(.roundedBorder)
+                .autoSelectText()
             
             Text(unit)
                 .font(.subheadline)

@@ -39,6 +39,7 @@ struct FoodDetailView: View {
                                 .textInputAutocapitalization(.never)
                                 .textFieldStyle(.roundedBorder)
                                 .frame(width: 100)
+                                .autoSelectText()
                                 .onChange(of: viewModel.chosenGrams) { _, newValue in
                                     viewModel.calculate(for: newValue)
                                 }

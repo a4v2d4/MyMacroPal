@@ -376,9 +376,9 @@ struct BuiltInFoodUseSheet: View {
                 }
 
                 if useMode == 0 {
-                    HStack { Text("Grams"); Spacer(); TextField("0", text: $grams).keyboardType(.decimalPad).multilineTextAlignment(.trailing) }
+                    HStack { Text("Grams"); Spacer(); TextField("0", text: $grams).keyboardType(.decimalPad).multilineTextAlignment(.trailing).autoSelectText() }
                 } else {
-                    HStack { Text("Servings (\(Int(food.gramsPerServing))g ea)"); Spacer(); TextField("1", text: $servings).keyboardType(.decimalPad).multilineTextAlignment(.trailing) }
+                    HStack { Text("Servings (\(Int(food.gramsPerServing))g ea)"); Spacer(); TextField("1", text: $servings).keyboardType(.decimalPad).multilineTextAlignment(.trailing).autoSelectText() }
                 }
 
                 Section(header: Text("Macros")) {
@@ -513,14 +513,14 @@ struct FoodLibraryEditor: View {
         Form {
             Section(header: Text("Food")) {
                 TextField("Name", text: $name)
-                HStack { Text("Grams per serving"); Spacer(); TextField("0", text: $gramsPerServing).keyboardType(.decimalPad).multilineTextAlignment(.trailing) }
+                HStack { Text("Grams per serving"); Spacer(); TextField("0", text: $gramsPerServing).keyboardType(.decimalPad).multilineTextAlignment(.trailing).autoSelectText() }
             }
             Section(header: Text("Macros per serving")) {
-                HStack { Text("Calories"); Spacer(); TextField("0", text: $calories).keyboardType(.decimalPad).multilineTextAlignment(.trailing) }
-                HStack { Text("Protein (g)"); Spacer(); TextField("0", text: $protein).keyboardType(.decimalPad).multilineTextAlignment(.trailing) }
-                HStack { Text("Fat (g)"); Spacer(); TextField("0", text: $fat).keyboardType(.decimalPad).multilineTextAlignment(.trailing) }
-                HStack { Text("Carbs (g)"); Spacer(); TextField("0", text: $carbs).keyboardType(.decimalPad).multilineTextAlignment(.trailing) }
-                HStack { Text("Fiber (g)"); Spacer(); TextField("0", text: $fiber).keyboardType(.decimalPad).multilineTextAlignment(.trailing) }
+                HStack { Text("Calories"); Spacer(); TextField("0", text: $calories).keyboardType(.decimalPad).multilineTextAlignment(.trailing).autoSelectText() }
+                HStack { Text("Protein (g)"); Spacer(); TextField("0", text: $protein).keyboardType(.decimalPad).multilineTextAlignment(.trailing).autoSelectText() }
+                HStack { Text("Fat (g)"); Spacer(); TextField("0", text: $fat).keyboardType(.decimalPad).multilineTextAlignment(.trailing).autoSelectText() }
+                HStack { Text("Carbs (g)"); Spacer(); TextField("0", text: $carbs).keyboardType(.decimalPad).multilineTextAlignment(.trailing).autoSelectText() }
+                HStack { Text("Fiber (g)"); Spacer(); TextField("0", text: $fiber).keyboardType(.decimalPad).multilineTextAlignment(.trailing).autoSelectText() }
             }
             // Presets removed
             Section {
@@ -621,9 +621,9 @@ struct LibraryFoodUseSheet: View {
                 }
 
                 if useMode == 0 {
-                    HStack { Text("Grams"); Spacer(); TextField("0", text: $grams).keyboardType(.decimalPad).multilineTextAlignment(.trailing) }
+                    HStack { Text("Grams"); Spacer(); TextField("0", text: $grams).keyboardType(.decimalPad).multilineTextAlignment(.trailing).autoSelectText() }
                 } else {
-                    HStack { Text("Servings (\(Int(food.gramsPerServing))g ea)"); Spacer(); TextField("1", text: $servings).keyboardType(.decimalPad).multilineTextAlignment(.trailing) }
+                    HStack { Text("Servings (\(Int(food.gramsPerServing))g ea)"); Spacer(); TextField("1", text: $servings).keyboardType(.decimalPad).multilineTextAlignment(.trailing).autoSelectText() }
                 }
 
                 Section(header: Text("Macros")) {
@@ -837,6 +837,7 @@ struct ManualEntryView: View {
                         .keyboardType(.decimalPad)
                         .autocorrectionDisabled(true)
                         .multilineTextAlignment(.trailing)
+                        .autoSelectText()
                 }
 
                 HStack {
@@ -846,6 +847,7 @@ struct ManualEntryView: View {
                         .keyboardType(.decimalPad)
                         .autocorrectionDisabled(true)
                         .multilineTextAlignment(.trailing)
+                        .autoSelectText()
                 }
 
                 HStack {
@@ -855,6 +857,7 @@ struct ManualEntryView: View {
                         .keyboardType(.decimalPad)
                         .autocorrectionDisabled(true)
                         .multilineTextAlignment(.trailing)
+                        .autoSelectText()
                 }
 
                 HStack {
@@ -864,6 +867,7 @@ struct ManualEntryView: View {
                         .keyboardType(.decimalPad)
                         .autocorrectionDisabled(true)
                         .multilineTextAlignment(.trailing)
+                        .autoSelectText()
                 }
 
                 HStack {
@@ -873,6 +877,7 @@ struct ManualEntryView: View {
                         .keyboardType(.decimalPad)
                         .autocorrectionDisabled(true)
                         .multilineTextAlignment(.trailing)
+                        .autoSelectText()
                 }
             }
 
