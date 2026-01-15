@@ -19,7 +19,7 @@ The iOS widget implementation is complete! However, the Xcode project needs to b
 
 ## Xcode Configuration Steps
 
-### 1. Configure App Group
+### 1. [x] Configure App Group
 
 1. Open the project in Xcode
 2. Select the **MyMacroPal** project in the navigator
@@ -28,7 +28,7 @@ The iOS widget implementation is complete! However, the Xcode project needs to b
 5. Click **+ Capability** and add **App Groups**
 6. Check/Add the app group: `group.AVIDWareAthletics.MyMacroPal`
 
-### 2. Add Widget Extension Target (if not already added)
+### 2. [x] Add Widget Extension Target (if not already added)
 
 If the widget extension target doesn't exist or isn't properly configured:
 
@@ -39,7 +39,7 @@ If the widget extension target doesn't exist or isn't properly configured:
 5. Click **Finish**
 6. When prompted to activate the scheme, click **Activate**
 
-### 3. Configure Widget Target
+### 3. [x] Configure Widget Target
 
 1. Select the **MyMacroPalWidgetExtension** target
 2. Go to **Signing & Capabilities**
@@ -47,7 +47,7 @@ If the widget extension target doesn't exist or isn't properly configured:
 4. Check/Add: `group.AVIDWareAthletics.MyMacroPal`
 5. Set **Code Signing Entitlements** to: `MyMacroPalWidgetExtension/MyMacroPalWidgetExtension.entitlements`
 
-### 4. Add Files to Widget Target
+### 4. [x] Add Files to Widget Target
 
 The widget needs access to certain files from the main app:
 
@@ -61,22 +61,28 @@ The widget needs access to certain files from the main app:
    - Click on each file in the Project Navigator
    - In the **File Inspector** (right panel), check the box next to **MyMacroPalWidgetExtension** under "Target Membership"
 
-### 5. Configure Main App Target Entitlements
+### 5. [x] Configure Main App Target Entitlements
 
 1. Select the **MyMacroPal** target
 2. Go to **Build Settings**
 3. Search for "Code Signing Entitlements"
 4. Set it to: `MyMacroPal/MyMacroPal.entitlements`
 
-### 6. Build and Run
+### 6. [x] Build and Run
 
 1. Select the **MyMacroPal** scheme
 2. Build and run the app (⌘R)
 3. Add some food entries and set your goals in Settings
 4. On your device/simulator, long-press the home screen
 5. Tap the **+** button to add a widget
-6. Search for "MyMacroPal" and add the medium-sized widget
-7. The widget should display your daily macro progress!
+6. Search for "MyMacroPal" - you'll see 5 widget options:
+   - **All Macros** - Compact 2x2 grid with all 4 macros
+   - **Protein** - Protein only
+   - **Calories** - Calories only
+   - **Carbs** - Carbs only
+   - **Fat** - Fat only
+7. Add whichever widgets you prefer to your home screen
+8. The widgets should display your daily macro progress!
 
 ## Testing the Widget
 
@@ -108,19 +114,35 @@ The widget needs access to certain files from the main app:
 
 ## Widget Features
 
-- ✅ 2x2 grid layout with 4 circular progress indicators
-- ✅ Calories (top-left, blue)
-- ✅ Protein (top-right, green)
-- ✅ Carbs (bottom-left, purple)
-- ✅ Fat (bottom-right, orange)
-- ✅ Shows percentage complete and current value
+### Available Widget Variants (5 total):
+
+1. **All Macros** - Compact square widget with all 4 macros in a 2x2 grid
+   - Calories (top-left, blue)
+   - Protein (top-right, green)
+   - Carbs (bottom-left, purple)
+   - Fat (bottom-right, orange)
+
+2. **Calories** - Single large circular progress for calories (blue)
+
+3. **Protein** - Single large circular progress for protein (green)
+
+4. **Carbs** - Single large circular progress for carbs (purple)
+
+5. **Fat** - Single large circular progress for fat (orange)
+
+### Widget Features:
+- ✅ Clean, modern design with proper spacing and margins
+- ✅ Circular progress indicators with percentage and current values
+- ✅ Color-coded macros (blue=calories, green=protein, purple=carbs, orange=fat)
 - ✅ Updates hourly automatically
-- ✅ Matches the visual design of similar fitness tracking apps
+- ✅ Compact design - all widgets are small (systemSmall) size
+- ✅ Matches iOS design guidelines
 
 ## Notes
 
-- The widget is read-only and displays data from the main app
+- All widgets are read-only and display data from the main app
 - Users must open the main app to add food or change goals
-- Widget size is `.systemMedium` (2x2 square grid)
+- All widgets use `.systemSmall` size (square, 4 app icon spaces)
 - Refreshes automatically every hour or when iOS allows
+- You can add multiple widgets to your home screen (e.g., one for calories, one for protein, or use the compact All Macros widget)
 

@@ -100,60 +100,7 @@ struct MacroProvider: TimelineProvider {
 
 // MARK: - Widget Views
 
-// 1. Medium Widget (4 macros in 2x2 grid)
-struct MacroWidgetMediumView: View {
-    var entry: MacroEntry
-    
-    var body: some View {
-        ZStack {
-            ContainerRelativeShape()
-                .fill(Color(UIColor.systemBackground))
-            
-            VStack(spacing: 8) {
-                // Top row: Calories (left) and Protein (right)
-                HStack(spacing: 8) {
-                    CircularProgressView(
-                        label: "Calories",
-                        value: entry.calories,
-                        goal: entry.goalCalories,
-                        color: .blue,
-                        size: .medium
-                    )
-                    
-                    CircularProgressView(
-                        label: "Protein",
-                        value: entry.protein,
-                        goal: entry.goalProtein,
-                        color: .green,
-                        size: .medium
-                    )
-                }
-                
-                // Bottom row: Carbs (left) and Fat (right)
-                HStack(spacing: 8) {
-                    CircularProgressView(
-                        label: "Carbs",
-                        value: entry.carbs,
-                        goal: entry.goalCarbs,
-                        color: .purple,
-                        size: .medium
-                    )
-                    
-                    CircularProgressView(
-                        label: "Fat",
-                        value: entry.fat,
-                        goal: entry.goalFat,
-                        color: .orange,
-                        size: .medium
-                    )
-                }
-            }
-            .padding(16)
-        }
-    }
-}
-
-// 2. Small Widget (4 macros in 2x2 grid, compact)
+// Compact Widget (4 macros in 2x2 grid)
 struct MacroWidgetSmallView: View {
     var entry: MacroEntry
     
@@ -206,7 +153,7 @@ struct MacroWidgetSmallView: View {
     }
 }
 
-// 3. Single Macro Widget - Calories
+// Single Macro Widget - Calories
 struct CaloriesWidgetView: View {
     var entry: MacroEntry
     
@@ -227,7 +174,7 @@ struct CaloriesWidgetView: View {
     }
 }
 
-// 4. Single Macro Widget - Protein
+// Single Macro Widget - Protein
 struct ProteinWidgetView: View {
     var entry: MacroEntry
     
@@ -248,7 +195,7 @@ struct ProteinWidgetView: View {
     }
 }
 
-// 5. Single Macro Widget - Carbs
+// Single Macro Widget - Carbs
 struct CarbsWidgetView: View {
     var entry: MacroEntry
     
@@ -269,7 +216,7 @@ struct CarbsWidgetView: View {
     }
 }
 
-// 6. Single Macro Widget - Fat
+// Single Macro Widget - Fat
 struct FatWidgetView: View {
     var entry: MacroEntry
     
@@ -290,37 +237,6 @@ struct FatWidgetView: View {
     }
 }
 
-// 7. Dual Macro Widget - Calories + Protein
-struct CaloriesProteinWidgetView: View {
-    var entry: MacroEntry
-    
-    var body: some View {
-        ZStack {
-            ContainerRelativeShape()
-                .fill(Color(UIColor.systemBackground))
-            
-            HStack(spacing: 8) {
-                CircularProgressView(
-                    label: "Calories",
-                    value: entry.calories,
-                    goal: entry.goalCalories,
-                    color: .blue,
-                    size: .large
-                )
-                
-                CircularProgressView(
-                    label: "Protein",
-                    value: entry.protein,
-                    goal: entry.goalProtein,
-                    color: .green,
-                    size: .large
-                )
-            }
-            .padding(16)
-        }
-    }
-}
-
 // MARK: - Circular Progress Component
 struct CircularProgressView: View {
     let label: String
@@ -330,12 +246,11 @@ struct CircularProgressView: View {
     let size: WidgetSize
     
     enum WidgetSize {
-        case small, medium, large
+        case small, large
         
         var circleSize: CGFloat {
             switch self {
             case .small: return 50
-            case .medium: return 70
             case .large: return 90
             }
         }
@@ -343,7 +258,6 @@ struct CircularProgressView: View {
         var lineWidth: CGFloat {
             switch self {
             case .small: return 5
-            case .medium: return 7
             case .large: return 9
             }
         }
@@ -351,7 +265,6 @@ struct CircularProgressView: View {
         var percentageFont: Font {
             switch self {
             case .small: return .system(size: 13, weight: .bold, design: .rounded)
-            case .medium: return .system(size: 18, weight: .bold, design: .rounded)
             case .large: return .system(size: 24, weight: .bold, design: .rounded)
             }
         }
@@ -359,7 +272,6 @@ struct CircularProgressView: View {
         var valueFont: Font {
             switch self {
             case .small: return .system(size: 9, weight: .medium)
-            case .medium: return .system(size: 12, weight: .medium)
             case .large: return .system(size: 14, weight: .medium)
             }
         }
@@ -367,7 +279,6 @@ struct CircularProgressView: View {
         var labelFont: Font {
             switch self {
             case .small: return .system(size: 9, weight: .semibold)
-            case .medium: return .system(size: 11, weight: .semibold)
             case .large: return .system(size: 13, weight: .semibold)
             }
         }
@@ -375,7 +286,6 @@ struct CircularProgressView: View {
         var spacing: CGFloat {
             switch self {
             case .small: return 3
-            case .medium: return 6
             case .large: return 8
             }
         }
@@ -431,21 +341,7 @@ struct CircularProgressView: View {
 
 // MARK: - Widget Configurations
 
-// 1. All Macros Widget (Medium)
-struct AllMacrosWidget: Widget {
-    let kind: String = "AllMacrosWidget"
-    
-    var body: some WidgetConfiguration {
-        StaticConfiguration(kind: kind, provider: MacroProvider()) { entry in
-            MacroWidgetMediumView(entry: entry)
-        }
-        .configurationDisplayName("All Macros")
-        .description("Track calories, protein, carbs, and fat")
-        .supportedFamilies([.systemMedium])
-    }
-}
-
-// 2. All Macros Widget (Small - 2x2)
+// All Macros Widget (Compact)
 struct AllMacrosSmallWidget: Widget {
     let kind: String = "AllMacrosSmallWidget"
     
@@ -453,13 +349,13 @@ struct AllMacrosSmallWidget: Widget {
         StaticConfiguration(kind: kind, provider: MacroProvider()) { entry in
             MacroWidgetSmallView(entry: entry)
         }
-        .configurationDisplayName("All Macros (Compact)")
-        .description("Track all macros in a small widget")
+        .configurationDisplayName("All Macros")
+        .description("Track all macros with 1 compact widget")
         .supportedFamilies([.systemSmall])
     }
 }
 
-// 3. Calories Only Widget
+// Calories Widget
 struct CaloriesWidget: Widget {
     let kind: String = "CaloriesWidget"
     
@@ -473,7 +369,7 @@ struct CaloriesWidget: Widget {
     }
 }
 
-// 4. Protein Only Widget
+// Protein Widget
 struct ProteinWidget: Widget {
     let kind: String = "ProteinWidget"
     
@@ -487,7 +383,7 @@ struct ProteinWidget: Widget {
     }
 }
 
-// 5. Carbs Only Widget
+// Carbs Widget
 struct CarbsWidget: Widget {
     let kind: String = "CarbsWidget"
     
@@ -501,7 +397,7 @@ struct CarbsWidget: Widget {
     }
 }
 
-// 6. Fat Only Widget
+// Fat Widget
 struct FatWidget: Widget {
     let kind: String = "FatWidget"
     
@@ -512,34 +408,6 @@ struct FatWidget: Widget {
         .configurationDisplayName("Fat")
         .description("Track daily fat intake")
         .supportedFamilies([.systemSmall])
-    }
-}
-
-// 7. Calories + Protein Widget
-struct CaloriesProteinWidget: Widget {
-    let kind: String = "CaloriesProteinWidget"
-    
-    var body: some WidgetConfiguration {
-        StaticConfiguration(kind: kind, provider: MacroProvider()) { entry in
-            CaloriesProteinWidgetView(entry: entry)
-        }
-        .configurationDisplayName("Calories + Protein")
-        .description("Track calories and protein together")
-        .supportedFamilies([.systemSmall])
-    }
-}
-
-// Compatibility shim for old widget name
-struct MyMacroPalWidget: Widget {
-    let kind: String = "MyMacroPalWidget"
-    
-    var body: some WidgetConfiguration {
-        StaticConfiguration(kind: kind, provider: MacroProvider()) { entry in
-            MacroWidgetMediumView(entry: entry)
-        }
-        .configurationDisplayName("Macro Tracker")
-        .description("Track your daily macros at a glance")
-        .supportedFamilies([.systemMedium])
     }
 }
 
@@ -559,25 +427,25 @@ struct MyMacroPalWidget_Previews: PreviewProvider {
     
     static var previews: some View {
         Group {
-            MacroWidgetMediumView(entry: sampleEntry)
-                .previewContext(WidgetPreviewContext(family: .systemMedium))
-                .previewDisplayName("All Macros (Medium)")
-            
             MacroWidgetSmallView(entry: sampleEntry)
                 .previewContext(WidgetPreviewContext(family: .systemSmall))
-                .previewDisplayName("All Macros (Small)")
+                .previewDisplayName("All Macros")
             
             CaloriesWidgetView(entry: sampleEntry)
                 .previewContext(WidgetPreviewContext(family: .systemSmall))
-                .previewDisplayName("Calories Only")
+                .previewDisplayName("Calories")
             
             ProteinWidgetView(entry: sampleEntry)
                 .previewContext(WidgetPreviewContext(family: .systemSmall))
-                .previewDisplayName("Protein Only")
+                .previewDisplayName("Protein")
             
-            CaloriesProteinWidgetView(entry: sampleEntry)
+            CarbsWidgetView(entry: sampleEntry)
                 .previewContext(WidgetPreviewContext(family: .systemSmall))
-                .previewDisplayName("Calories + Protein")
+                .previewDisplayName("Carbs")
+            
+            FatWidgetView(entry: sampleEntry)
+                .previewContext(WidgetPreviewContext(family: .systemSmall))
+                .previewDisplayName("Fat")
         }
     }
 }

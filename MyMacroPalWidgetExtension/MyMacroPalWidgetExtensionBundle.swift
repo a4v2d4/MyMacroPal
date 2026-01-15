@@ -11,20 +11,13 @@ import SwiftUI
 @main
 struct MyMacroPalWidgetExtensionBundle: WidgetBundle {
     var body: some Widget {
-        // Legacy widget for backward compatibility
-        MyMacroPalWidget()
+        // Compact widget showing all 4 macros
+        AllMacrosSmallWidget()
         
-        // All macros widgets
-        AllMacrosWidget()          // Medium size - 4 macros
-        AllMacrosSmallWidget()     // Small size - 4 macros compact
-        
-        // Individual macro widgets (Small size)
-        CaloriesWidget()
+        // Individual macro widgets
         ProteinWidget()
+        CaloriesWidget()
         CarbsWidget()
         FatWidget()
-        
-        // Dual macro widget (Small size)
-        CaloriesProteinWidget()
     }
 }
