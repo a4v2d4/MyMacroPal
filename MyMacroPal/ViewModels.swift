@@ -47,6 +47,7 @@ final class AddFoodViewModel: ObservableObject {
     @Published var errorMessage: String? = nil
 
     private let service = USDAService()
+    
     private var searchTask: Task<Void, Never>?
 
     func search(_ query: String) {

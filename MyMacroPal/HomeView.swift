@@ -24,39 +24,41 @@ struct HomeView: View {
                 // Put summary inside the list so it collapses to a pinned header when scrolling
                 List {
                     Section {
-                        VStack(spacing: 12) {
-                            MacroRow(
-                                label: "Calories",
-                                value: viewModel.totalCalories,
-                                goal: UserDefaults.shared.double(forKey: "goalCalories", default: 2000),
-                                color: .blue
-                            )
-                            MacroRow(
-                                label: "Protein (g)",
-                                value: viewModel.totalProtein,
-                                goal: UserDefaults.shared.double(forKey: "goalProtein", default: 150),
-                                color: .green
-                            )
-                            MacroRow(
-                                label: "Fat (g)",
-                                value: viewModel.totalFat,
-                                goal: UserDefaults.shared.double(forKey: "goalFat", default: 70),
-                                color: .orange
-                            )
-                            MacroRow(
-                                label: "Carbs (g)",
-                                value: viewModel.totalCarbs,
-                                goal: UserDefaults.shared.double(forKey: "goalCarbs", default: 250),
-                                color: .purple
-                            )
-                            MacroRow(
-                                label: "Fiber (g)",
-                                value: viewModel.totalFiber,
-                                goal: UserDefaults.shared.double(forKey: "goalFiber", default: 30),
-                                color: .brown
-                            )
+                        NavigationLink(destination: MacroBreakdownView(entries: Array(todayEntries))) {
+                            VStack(spacing: 12) {
+                                MacroRow(
+                                    label: "Calories",
+                                    value: viewModel.totalCalories,
+                                    goal: UserDefaults.shared.double(forKey: "goalCalories", default: 2000),
+                                    color: .blue
+                                )
+                                MacroRow(
+                                    label: "Protein (g)",
+                                    value: viewModel.totalProtein,
+                                    goal: UserDefaults.shared.double(forKey: "goalProtein", default: 150),
+                                    color: .green
+                                )
+                                MacroRow(
+                                    label: "Fat (g)",
+                                    value: viewModel.totalFat,
+                                    goal: UserDefaults.shared.double(forKey: "goalFat", default: 70),
+                                    color: .orange
+                                )
+                                MacroRow(
+                                    label: "Carbs (g)",
+                                    value: viewModel.totalCarbs,
+                                    goal: UserDefaults.shared.double(forKey: "goalCarbs", default: 250),
+                                    color: .purple
+                                )
+                                MacroRow(
+                                    label: "Fiber (g)",
+                                    value: viewModel.totalFiber,
+                                    goal: UserDefaults.shared.double(forKey: "goalFiber", default: 30),
+                                    color: .brown
+                                )
+                            }
+                            .padding(.vertical, 4)
                         }
-                        .padding(.vertical, 4)
                     } header: {
                         HStack {
                             VStack(alignment: .leading, spacing: 2) {
