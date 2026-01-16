@@ -3,7 +3,13 @@ import SwiftUI
 // MARK: - Micronutrient Display View
 struct MicronutrientView: View {
     let micronutrients: MicronutrientData
+    let entries: [FoodEntryEntity]
     @State private var expandedCategories: Set<MicronutrientCategory> = []
+    
+    init(micronutrients: MicronutrientData, entries: [FoodEntryEntity] = []) {
+        self.micronutrients = micronutrients
+        self.entries = entries
+    }
     
     var body: some View {
         VStack(spacing: 16) {
@@ -11,6 +17,7 @@ struct MicronutrientView: View {
                 MicronutrientCategorySection(
                     category: category,
                     micronutrients: micronutrients,
+                    entries: entries,
                     isExpanded: expandedCategories.contains(category),
                     onToggle: {
                         if expandedCategories.contains(category) {
@@ -28,6 +35,7 @@ struct MicronutrientView: View {
 struct MicronutrientCategorySection: View {
     let category: MicronutrientCategory
     let micronutrients: MicronutrientData
+    let entries: [FoodEntryEntity]
     let isExpanded: Bool
     let onToggle: () -> Void
     
@@ -76,7 +84,8 @@ struct MicronutrientCategorySection: View {
                         MicronutrientRow(
                             nutrient: nutrient,
                             value: micronutrients[nutrient],
-                            percentage: micronutrients.percentage(for: nutrient)
+                            percentage: micronutrients.percentage(for: nutrient),
+                            entries: entries
                         )
                     }
                 }
@@ -90,6 +99,9 @@ struct MicronutrientRow: View {
     let nutrient: Micronutrient
     let value: Double
     let percentage: Double
+    let entries: [FoodEntryEntity]
+    
+    @State private var isExpanded = false
     
     private var progress: Double {
         min(percentage / 100.0, 1.0)
@@ -111,44 +123,90 @@ struct MicronutrientRow: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 6) {
-            HStack {
-                Text(nutrient.rawValue)
-                    .font(.subheadline)
-                    .foregroundColor(.primary)
-                
-                Spacer()
-                
-                HStack(spacing: 4) {
-                    Text(String(format: "%.1f", value))
-                        .font(.subheadline)
-                        .fontWeight(.medium)
-                    Text(nutrient.unit)
-                        .font(.caption)
-                        .foregroundColor(.secondary)
-                }
-                
-                Text("\(Int(percentage))%")
-                    .font(.subheadline)
-                    .fontWeight(.semibold)
-                    .foregroundColor(barColor)
-                    .frame(width: 50, alignment: .trailing)
-            }
-            
-            // Progress bar
-            GeometryReader { geometry in
-                ZStack(alignment: .leading) {
-                    Rectangle()
-                        .fill(Color(.systemGray5))
-                        .frame(height: 6)
-                        .cornerRadius(3)
+            Button(action: { withAnimation { isExpanded.toggle() } }) {
+                VStack(alignment: .leading, spacing: 6) {
+                    HStack {
+                        Text(nutrient.rawValue)
+                            .font(.subheadline)
+                            .foregroundColor(.primary)
+                        
+                        Spacer()
+                        
+                        HStack(spacing: 4) {
+                            Text(value >= 10 ? String(format: "%.0f", value) : String(format: "%.1f", value))
+                                .font(.subheadline)
+                                .fontWeight(.medium)
+                            Text(nutrient.unit)
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                        }
+                        
+                        Text("\(Int(percentage))%")
+                            .font(.subheadline)
+                            .fontWeight(.semibold)
+                            .foregroundColor(barColor)
+                            .frame(width: 50, alignment: .trailing)
+                    }
                     
-                    Rectangle()
-                        .fill(barColor)
-                        .frame(width: geometry.size.width * progress, height: 6)
-                        .cornerRadius(3)
+                    // Progress bar
+                    GeometryReader { geometry in
+                        ZStack(alignment: .leading) {
+                            Rectangle()
+                                .fill(Color(.systemGray5))
+                                .frame(height: 6)
+                                .cornerRadius(3)
+                            
+                            Rectangle()
+                                .fill(barColor)
+                                .frame(width: geometry.size.width * progress, height: 6)
+                                .cornerRadius(3)
+                        }
+                    }
+                    .frame(height: 6)
                 }
             }
-            .frame(height: 6)
+            .buttonStyle(.plain)
+            
+            if isExpanded {
+                let contributingEntries = entries
+                    .filter { $0.micronutrients[nutrient] > 0 }
+                    .sorted { $0.micronutrients[nutrient] > $1.micronutrients[nutrient] }
+                
+                VStack(alignment: .leading, spacing: 4) {
+                    if contributingEntries.isEmpty {
+                        Text("No contributions")
+                            .font(.caption2)
+                            .foregroundColor(.secondary)
+                            .italic()
+                            .padding(.leading, 8)
+                    } else {
+                        ForEach(contributingEntries, id: \.id) { entry in
+                            HStack {
+                                VStack(alignment: .leading, spacing: 2) {
+                                    Text(entry.name ?? "Unknown Food")
+                                        .font(.caption2)
+                                        .foregroundColor(.primary)
+                                        .lineLimit(1)
+                                    
+                                    Text("\(Int(entry.quantityGrams))g")
+                                        .font(.system(size: 8))
+                                        .foregroundColor(.secondary)
+                                }
+                                
+                                Spacer()
+                                
+                                let entryValue = entry.micronutrients[nutrient]
+                                Text("\(entryValue >= 10 ? String(format: "%.0f", entryValue) : String(format: "%.1f", entryValue))\(nutrient.unit)")
+                                    .font(.caption2)
+                                    .monospacedDigit()
+                                    .foregroundColor(.secondary)
+                            }
+                            .padding(.leading, 8)
+                        }
+                    }
+                }
+                .transition(.opacity.combined(with: .move(edge: .top)))
+            }
         }
         .padding(.vertical, 4)
         .padding(.horizontal, 12)
@@ -159,6 +217,13 @@ struct MicronutrientRow: View {
 struct MicronutrientSummaryView: View {
     let micronutrients: MicronutrientData
     let highlights: [Micronutrient]
+    let entries: [FoodEntryEntity]
+    
+    init(micronutrients: MicronutrientData, highlights: [Micronutrient], entries: [FoodEntryEntity] = []) {
+        self.micronutrients = micronutrients
+        self.highlights = highlights
+        self.entries = entries
+    }
     
     var body: some View {
         VStack(spacing: 12) {
@@ -170,7 +235,8 @@ struct MicronutrientSummaryView: View {
                 MicronutrientRow(
                     nutrient: nutrient,
                     value: micronutrients[nutrient],
-                    percentage: micronutrients.percentage(for: nutrient)
+                    percentage: micronutrients.percentage(for: nutrient),
+                    entries: entries
                 )
             }
         }
@@ -190,12 +256,13 @@ struct MicronutrientSummaryView: View {
     
     return ScrollView {
         VStack(spacing: 20) {
-            MicronutrientView(micronutrients: sampleData)
+            MicronutrientView(micronutrients: sampleData, entries: [])
                 .padding()
             
             MicronutrientSummaryView(
                 micronutrients: sampleData,
-                highlights: [.vitaminC, .calcium, .iron, .sodium]
+                highlights: [.vitaminC, .calcium, .iron, .sodium],
+                entries: []
             )
             .padding()
         }

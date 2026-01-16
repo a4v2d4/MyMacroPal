@@ -75,8 +75,11 @@ struct HomeView: View {
 
                     Section {
                         NavigationLink(destination: ScrollView {
-                            MicronutrientView(micronutrients: viewModel.totalMicronutrients)
-                                .padding()
+                            MicronutrientView(
+                                micronutrients: viewModel.totalMicronutrients,
+                                entries: Array(todayEntries)
+                            )
+                            .padding()
                         }
                         .navigationTitle("Micronutrients")
                         .navigationBarTitleDisplayMode(.inline)
