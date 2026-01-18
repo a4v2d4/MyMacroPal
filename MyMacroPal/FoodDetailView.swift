@@ -7,6 +7,28 @@ struct FoodDetailView: View {
     @Environment(\.dismiss) private var dismiss
     @EnvironmentObject private var library: FoodLibraryStore
     var targetDate: Date? = nil
+    var targetMeal: MealEntity? = nil
+    @State private var entryDate: Date = Date()
+
+    init(viewModel: FoodDetailViewModel, targetDate: Date? = nil, targetMeal: MealEntity? = nil) {
+        self.viewModel = viewModel
+        self.targetDate = targetDate
+        self.targetMeal = targetMeal
+        
+        if let mealDate = targetMeal?.date {
+            _entryDate = State(initialValue: mealDate)
+        } else if let tDate = targetDate {
+            let now = Date()
+            let calendar = Calendar.current
+            let combined = calendar.date(bySettingHour: calendar.component(.hour, from: now),
+                                       minute: calendar.component(.minute, from: now),
+                                       second: calendar.component(.second, from: now),
+                                       of: tDate) ?? tDate
+            _entryDate = State(initialValue: combined)
+        } else {
+            _entryDate = State(initialValue: Date())
+        }
+    }
 
     var body: some View {
         NavigationView {
@@ -25,6 +47,12 @@ struct FoodDetailView: View {
                                 .font(.caption)
                                 .foregroundColor(.secondary)
                         }
+                    }
+
+                    // Date selection
+                    VStack(spacing: 8) {
+                        DatePicker("Time", selection: $entryDate)
+                            .padding(.horizontal)
                     }
 
                     // Serving size selection
@@ -206,7 +234,8 @@ struct FoodDetailView: View {
         entry.quantityGrams = viewModel.chosenGrams
         entry.source = "usda"
         entry.fdcId = Int64(viewModel.food.fdcId)
-        entry.date = targetDate ?? Date()
+        entry.date = entryDate
+        entry.meal = targetMeal
         entry.micronutrients = viewModel.calculatedMicronutrients
 
         do {

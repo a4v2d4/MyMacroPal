@@ -110,3 +110,70 @@ extension DailyLogEntity {
         return entries.reduce(MicronutrientData()) { $0 + $1.micronutrients }
     }
 }
+
+// MARK: - Meal Entity Extensions
+extension MealEntity {
+    var foodEntries: [FoodEntryEntity] {
+        let set = entries as? Set<FoodEntryEntity> ?? []
+        return set.sorted { ($0.date ?? Date()) < ($1.date ?? Date()) }
+    }
+    
+    var totalCalories: Double {
+        foodEntries.reduce(0) { $0 + $1.calories }
+    }
+    
+    var totalProtein: Double {
+        foodEntries.reduce(0) { $0 + $1.protein }
+    }
+    
+    var totalFat: Double {
+        foodEntries.reduce(0) { $0 + $1.fat }
+    }
+    
+    var totalCarbs: Double {
+        foodEntries.reduce(0) { $0 + $1.carbs }
+    }
+    
+    var totalFiber: Double {
+        foodEntries.reduce(0) { $0 + $1.fiber }
+    }
+}
+
+// MARK: - Meal Library Models
+struct LibraryMeal: Identifiable, Codable {
+    let id: UUID
+    var name: String
+    var items: [LibraryMealItem]
+    var createdAt: Date
+    
+    init(id: UUID = UUID(), name: String, items: [LibraryMealItem]) {
+        self.id = id
+        self.name = name
+        self.items = items
+        self.createdAt = Date()
+    }
+}
+
+struct LibraryMealItem: Identifiable, Codable {
+    let id: UUID
+    var foodName: String
+    var grams: Double
+    var calories: Double
+    var protein: Double
+    var fat: Double
+    var carbs: Double
+    var fiber: Double
+    var micronutrients: MicronutrientData?
+    
+    init(id: UUID = UUID(), foodName: String, grams: Double, calories: Double, protein: Double, fat: Double, carbs: Double, fiber: Double, micronutrients: MicronutrientData? = nil) {
+        self.id = id
+        self.foodName = foodName
+        self.grams = grams
+        self.calories = calories
+        self.protein = protein
+        self.fat = fat
+        self.carbs = carbs
+        self.fiber = fiber
+        self.micronutrients = micronutrients
+    }
+}
