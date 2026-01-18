@@ -49,16 +49,16 @@
         },
         {
             "name": "Sourdough Bread",
-            "gramsPerServing": 38,
-            "caloriesPerServing": 113,
-            "proteinPerServing": 4,
-            "fatPerServing": 1,
-            "carbsPerServing": 22,
+            "gramsPerServing": 45,
+            "caloriesPerServing": 110,
+            "proteinPerServing": 3,
+            "fatPerServing": 0.5,
+            "carbsPerServing": 23,
             "fiberPerServing": 0,
             "micronutrients": {
                 "magnesium": 12.0,
                 "zinc": 0.4,
-                "iron": 1.5,
+                "iron": 1.4,
                 "potassium": 53.0,
                 "sodium": 200.0
             }

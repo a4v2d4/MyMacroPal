@@ -43,11 +43,11 @@ All values are per labeled serving
 
 ### Sourdough Bread
 
-- **Serving Size:** 38g (1 slice)
-- **Calories:** 113
-- **Protein:** 4g
-- **Fat:** 1g
-- **Carbs:** 22g
+- **Serving Size:** 45g (1 slice)
+- **Calories:** 110
+- **Protein:** 3g
+- **Fat:** 0.5g
+- **Carbs:** 23g
 - **Fiber:** 0g
 - **Notes:** 0g added sugars
 
