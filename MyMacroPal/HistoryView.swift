@@ -445,6 +445,7 @@ struct EditableFoodEntryRow: View {
     @State private var isEditing = false
     @State private var gramsText: String = ""
     @State private var showEditDetails = false
+    @State private var showMoveMeal = false
 
     var body: some View {
         VStack(alignment: .leading, spacing: 6) {
@@ -456,6 +457,31 @@ struct EditableFoodEntryRow: View {
                     Image(systemName: "checkmark.circle.fill")
                         .foregroundColor(.green)
                         .font(.caption)
+                }
+                
+                Menu {
+                    Button(action: {
+                        gramsText = entry.quantityGrams > 0 ? String(Int(entry.quantityGrams)) : ""
+                        isEditing = true
+                    }) {
+                        Label("Change Amount", systemImage: "scalemass")
+                    }
+                    
+                    Button(action: {
+                        showEditDetails = true
+                    }) {
+                        Label("Edit Details", systemImage: "pencil")
+                    }
+                    
+                    Button(action: {
+                        showMoveMeal = true
+                    }) {
+                        Label("Move to Meal", systemImage: "arrow.right")
+                    }
+                } label: {
+                    Image(systemName: "ellipsis")
+                        .foregroundColor(.secondary)
+                        .padding(8)
                 }
             }
             
@@ -471,6 +497,10 @@ struct EditableFoodEntryRow: View {
                     Spacer()
                     Button("Save") { saveEdits() }
                         .buttonStyle(.borderedProminent)
+                    Button("Cancel") {
+                        isEditing = false
+                    }
+                    .buttonStyle(.bordered)
                 }
             } else {
                 HStack(spacing: 12) {
@@ -484,25 +514,14 @@ struct EditableFoodEntryRow: View {
                     }
                 }
             }
-            
-            HStack {
-                Button(isEditing ? "Cancel" : "Change Amount") {
-                    if isEditing {
-                        isEditing = false
-                    } else {
-                        gramsText = entry.quantityGrams > 0 ? String(Int(entry.quantityGrams)) : ""
-                        isEditing = true
-                    }
-                }
-                .buttonStyle(.bordered)
-
-                Button("Edit Details") { showEditDetails = true }
-                    .buttonStyle(.bordered)
-            }
         }
         .padding(.vertical, 4)
         .sheet(isPresented: $showEditDetails) {
             FoodEntryEditView(entry: entry)
+                .environment(\.managedObjectContext, viewContext)
+        }
+        .sheet(isPresented: $showMoveMeal) {
+            MoveMealSelectionView(entry: entry)
                 .environment(\.managedObjectContext, viewContext)
         }
     }
@@ -585,6 +604,102 @@ struct FoodEntryEditView: View {
         entry.quantityGrams = Double(gramsText) ?? entry.quantityGrams
         do { try viewContext.save() } catch { print("Edit save error: \(error)") }
         dismiss()
+    }
+}
+
+// Move meal selection sheet
+struct MoveMealSelectionView: View {
+    @ObservedObject var entry: FoodEntryEntity
+    @Environment(\.managedObjectContext) private var viewContext
+    @Environment(\.dismiss) private var dismiss
+    @FetchRequest private var meals: FetchedResults<MealEntity>
+    
+    init(entry: FoodEntryEntity) {
+        self.entry = entry
+        
+        // Fetch meals for the same day as the entry
+        let entryDate = entry.date ?? Date()
+        let calendar = Calendar.current
+        let start = calendar.startOfDay(for: entryDate)
+        let end = calendar.date(byAdding: .day, value: 1, to: start)!
+        
+        _meals = FetchRequest(
+            entity: MealEntity.entity(),
+            sortDescriptors: [NSSortDescriptor(keyPath: \MealEntity.date, ascending: true)],
+            predicate: NSPredicate(format: "date >= %@ AND date < %@", start as NSDate, end as NSDate)
+        )
+    }
+    
+    var body: some View {
+        NavigationView {
+            List {
+                Section(header: Text("Select Meal")) {
+                    // Option to move to uncategorized
+                    Button(action: {
+                        moveToMeal(nil)
+                    }) {
+                        HStack {
+                            Text("Uncategorized")
+                            Spacer()
+                            if entry.meal == nil {
+                                Image(systemName: "checkmark")
+                                    .foregroundColor(.blue)
+                            }
+                        }
+                    }
+                    .foregroundColor(.primary)
+                    
+                    // Options for each meal
+                    ForEach(meals) { meal in
+                        Button(action: {
+                            moveToMeal(meal)
+                        }) {
+                            HStack {
+                                VStack(alignment: .leading) {
+                                    Text(meal.name ?? "Meal")
+                                    if let mealDate = meal.date {
+                                        Text(timeString(mealDate))
+                                            .font(.caption)
+                                            .foregroundColor(.secondary)
+                                    }
+                                }
+                                Spacer()
+                                if entry.meal == meal {
+                                    Image(systemName: "checkmark")
+                                        .foregroundColor(.blue)
+                                }
+                            }
+                        }
+                        .foregroundColor(.primary)
+                    }
+                }
+            }
+            .navigationTitle("Move to Meal")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button("Cancel") {
+                        dismiss()
+                    }
+                }
+            }
+        }
+    }
+    
+    private func timeString(_ date: Date) -> String {
+        let formatter = DateFormatter()
+        formatter.timeStyle = .short
+        return formatter.string(from: date)
+    }
+    
+    private func moveToMeal(_ meal: MealEntity?) {
+        entry.meal = meal
+        do {
+            try viewContext.save()
+            dismiss()
+        } catch {
+            print("Error moving entry to meal: \(error)")
+        }
     }
 }
 
