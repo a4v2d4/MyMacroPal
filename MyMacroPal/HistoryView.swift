@@ -494,6 +494,7 @@ struct EditableFoodEntryRow: View {
                         .keyboardType(.decimalPad)
                         .multilineTextAlignment(.trailing)
                         .frame(width: 80)
+                        .autoSelectText()
                     Spacer()
                     Button("Save") { saveEdits() }
                         .buttonStyle(.borderedProminent)
