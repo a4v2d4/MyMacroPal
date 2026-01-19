@@ -8,6 +8,7 @@ struct HomeView: View {
     @State private var showAddFood = false
     @State private var selectedMeal: MealEntity?
     @State private var mealToEdit: MealEntity?
+    @State private var showMealCreate = false
     @FetchRequest private var todayMeals: FetchedResults<MealEntity>
     @FetchRequest private var uncategorizedEntries: FetchedResults<FoodEntryEntity>
     @FetchRequest private var allTodayEntries: FetchedResults<FoodEntryEntity>
@@ -167,7 +168,7 @@ struct HomeView: View {
                     }
                     
                     Section {
-                        Button(action: addNextMeal) {
+                        Button(action: { showMealCreate = true }) {
                             HStack {
                                 Image(systemName: "plus.circle.fill")
                                 Text("Add Meal #\(todayMeals.count + 1)")
@@ -237,6 +238,10 @@ struct HomeView: View {
                 MealEditView(meal: meal)
                     .environment(\.managedObjectContext, viewContext)
             }
+            .sheet(isPresented: $showMealCreate) {
+                MealCreateView(mealNumber: todayMeals.count + 1)
+                    .environment(\.managedObjectContext, viewContext)
+            }
             .onAppear {
                 viewModel.calculateTotalsForToday()
             }
@@ -258,18 +263,6 @@ struct HomeView: View {
         return formatter.string(from: date)
     }
 
-    private func addNextMeal() {
-        let newMeal = MealEntity(context: viewContext)
-        newMeal.id = UUID()
-        newMeal.name = "Meal #\(todayMeals.count + 1)"
-        newMeal.date = Date()
-        
-        do {
-            try viewContext.save()
-        } catch {
-            print("Error adding meal: \(error)")
-        }
-    }
 }
 
 extension HomeView {
