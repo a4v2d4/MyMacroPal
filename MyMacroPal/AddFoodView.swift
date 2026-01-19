@@ -354,6 +354,7 @@ struct BuiltInFoodUseSheet: View {
     @State private var servings: String = "1"
     @State private var useMode: Int = 0 // 0 grams, 1 servings
     @State private var entryDate: Date = Date()
+    @State private var showSavedConfirmation: Bool = false
 
     init(food: LibraryFood, targetDate: Date? = nil, targetMeal: MealEntity? = nil) {
         self.food = food
@@ -425,8 +426,20 @@ struct BuiltInFoodUseSheet: View {
                 Section {
                     Button("Add to Log") { saveEntry(); dismiss() }
                         .frame(maxWidth: .infinity)
-                    Button("Save to My Library") { saveToLibrary() }
+                    Button(showSavedConfirmation ? "Saved! ✓" : "Save to My Library") { saveToLibrary() }
                         .frame(maxWidth: .infinity)
+                        .disabled(showSavedConfirmation)
+                }
+                
+                if showSavedConfirmation {
+                    Section {
+                        HStack {
+                            Image(systemName: "checkmark.circle.fill")
+                                .foregroundColor(.green)
+                            Text("'\(food.name)' saved to library")
+                                .font(.subheadline)
+                        }
+                    }
                 }
             }
             .navigationTitle(food.name)
@@ -455,6 +468,12 @@ struct BuiltInFoodUseSheet: View {
 
     private func saveToLibrary() {
         library.addFood(food)
+        showSavedConfirmation = true
+        
+        // Auto-hide confirmation after 2 seconds
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+            showSavedConfirmation = false
+        }
     }
 }
 
@@ -999,6 +1018,7 @@ struct ManualEntryView: View {
     @State private var carbs = ""
     @State private var fiber = ""
     @State private var entryDate: Date = Date()
+    @State private var showSavedConfirmation: Bool = false
     var targetDate: Date? = nil
     var targetMeal: MealEntity? = nil
 
@@ -1100,11 +1120,23 @@ struct ManualEntryView: View {
                 .cornerRadius(8)
                 .disabled(name.isEmpty)
 
-                Button("Save to My Library") {
+                Button(showSavedConfirmation ? "Saved! ✓" : "Save to My Library") {
                     presentSaveToLibrary()
                 }
                 .frame(maxWidth: .infinity)
                 .padding(.top, 4)
+                .disabled(showSavedConfirmation || name.isEmpty)
+            }
+            
+            if showSavedConfirmation {
+                Section {
+                    HStack {
+                        Image(systemName: "checkmark.circle.fill")
+                            .foregroundColor(.green)
+                        Text("'\(name)' saved to library")
+                            .font(.subheadline)
+                    }
+                }
             }
         }
     }
@@ -1138,7 +1170,7 @@ struct ManualEntryView: View {
             tf.text = "100"
         }
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
-        alert.addAction(UIAlertAction(title: "Save", style: .default, handler: { _ in
+        alert.addAction(UIAlertAction(title: "Save", style: .default, handler: { [self] _ in
             let gramsText = alert.textFields?.first?.text ?? "100"
             let gps = Double(gramsText) ?? 100
             let item = LibraryFood(
@@ -1151,6 +1183,14 @@ struct ManualEntryView: View {
                 fiberPerServing: Double(fiber) ?? 0
             )
             library.addFood(item)
+            
+            // Show confirmation
+            showSavedConfirmation = true
+            
+            // Auto-hide confirmation after 2 seconds
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                showSavedConfirmation = false
+            }
         }))
         UIApplication.shared.windows.first?.rootViewController?.present(alert, animated: true)
     }

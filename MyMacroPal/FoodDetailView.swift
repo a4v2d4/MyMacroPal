@@ -9,6 +9,7 @@ struct FoodDetailView: View {
     var targetDate: Date? = nil
     var targetMeal: MealEntity? = nil
     @State private var entryDate: Date = Date()
+    @State private var showSavedConfirmation: Bool = false
 
     init(viewModel: FoodDetailViewModel, targetDate: Date? = nil, targetMeal: MealEntity? = nil) {
         self.viewModel = viewModel
@@ -198,16 +199,30 @@ struct FoodDetailView: View {
                     // Secondary save to library button
                     Button(action: { saveToLibrary() }) {
                         HStack {
-                            Image(systemName: "books.vertical")
-                            Text("Save to My Library")
+                            Image(systemName: showSavedConfirmation ? "checkmark.circle.fill" : "books.vertical")
+                            Text(showSavedConfirmation ? "Saved! ✓" : "Save to My Library")
                         }
                         .font(.headline)
                         .frame(maxWidth: .infinity)
                         .padding()
-                        .background(Color(.systemGray6))
+                        .background(showSavedConfirmation ? Color.green.opacity(0.2) : Color(.systemGray6))
                         .cornerRadius(12)
                     }
+                    .disabled(showSavedConfirmation)
                     .padding([.horizontal, .bottom])
+                    
+                    // Confirmation message
+                    if showSavedConfirmation {
+                        HStack {
+                            Image(systemName: "checkmark.circle.fill")
+                                .foregroundColor(.green)
+                            Text("'\(viewModel.food.description)' saved to library")
+                                .font(.subheadline)
+                                .foregroundColor(.secondary)
+                        }
+                        .padding(.horizontal)
+                        .padding(.bottom)
+                    }
                 }
             }
             .navigationTitle("Food Details")
@@ -257,6 +272,14 @@ struct FoodDetailView: View {
             fiberPerServing: viewModel.calculatedFiber
         )
         library.addFood(item)
+        
+        // Show confirmation
+        showSavedConfirmation = true
+        
+        // Auto-hide confirmation after 2 seconds
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+            showSavedConfirmation = false
+        }
     }
 }
 
