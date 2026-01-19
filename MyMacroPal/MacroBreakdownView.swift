@@ -63,9 +63,40 @@ struct MacroBreakdownView: View {
                     }
                 }
             }
+            
+            Section {
+                NavigationLink(destination: ScrollView {
+                    MicronutrientView(
+                        micronutrients: computeTotalMicronutrients(),
+                        entries: entries
+                    )
+                    .padding()
+                }
+                .navigationTitle("Micronutrients")
+                .navigationBarTitleDisplayMode(.inline)
+                ) {
+                    HStack {
+                        Image(systemName: "chart.bar.fill")
+                            .foregroundColor(.blue)
+                        Text("View Detailed Micronutrients")
+                            .font(.subheadline)
+                            .fontWeight(.medium)
+                    }
+                }
+            } header: {
+                Text("Full Report")
+            }
         }
         .listStyle(.insetGrouped)
         .navigationTitle("Daily Breakdown")
+    }
+    
+    private func computeTotalMicronutrients() -> MicronutrientData {
+        var totals = MicronutrientData()
+        for nutrient in Micronutrient.allCases {
+            totals[nutrient] = entries.reduce(0) { $0 + $1.micronutrients[nutrient] }
+        }
+        return totals
     }
     
     @ViewBuilder

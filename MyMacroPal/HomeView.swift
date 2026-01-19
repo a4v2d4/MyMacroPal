@@ -90,29 +90,6 @@ struct HomeView: View {
                             Spacer()
                         }
                     }
-
-                    Section {
-                        NavigationLink(destination: ScrollView {
-                            MicronutrientView(
-                                micronutrients: viewModel.totalMicronutrients,
-                                entries: Array(allTodayEntries)
-                            )
-                            .padding()
-                        }
-                        .navigationTitle("Micronutrients")
-                        .navigationBarTitleDisplayMode(.inline)
-                        ) {
-                            HStack {
-                                Image(systemName: "chart.bar.fill")
-                                    .foregroundColor(.blue)
-                                Text("View Micronutrients")
-                                    .font(.subheadline)
-                                    .fontWeight(.medium)
-                            }
-                        }
-                    } header: {
-                        Text("Vitamins & Minerals")
-                    }
                     
                     ForEach(todayMeals) { meal in
                         Section {
