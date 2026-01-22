@@ -179,8 +179,7 @@ struct DailyLogDetailView: View {
     @EnvironmentObject private var mealLibrary: MealLibraryStore
     @FetchRequest private var meals: FetchedResults<MealEntity>
     @FetchRequest private var uncategorizedEntries: FetchedResults<FoodEntryEntity>
-    @State private var showAddFood: Bool = false
-    @State private var selectedMeal: MealEntity?
+    @State private var addFoodContext: AddFoodContext?
     @State private var mealToEdit: MealEntity?
 
     init(date: Date) {
@@ -266,8 +265,10 @@ struct DailyLogDetailView: View {
                         
                         HStack(spacing: 16) {
                             Button(action: {
-                                selectedMeal = meal
-                                showAddFood = true
+                                addFoodContext = AddFoodContext(
+                                    targetMeal: meal,
+                                    targetDate: meal.date ?? date
+                                )
                             }) {
                                 Image(systemName: "plus")
                             }
@@ -334,8 +335,8 @@ struct DailyLogDetailView: View {
                 }
             }
         }
-        .sheet(isPresented: $showAddFood) {
-            AddFoodView(targetDate: date, targetMeal: selectedMeal)
+        .sheet(item: $addFoodContext) { context in
+            AddFoodView(targetDate: context.targetDate, targetMeal: context.targetMeal)
                 .environment(\.managedObjectContext, viewContext)
         }
         .sheet(item: $mealToEdit) { meal in

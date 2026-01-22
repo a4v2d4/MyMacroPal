@@ -1,6 +1,15 @@
 import Foundation
 import CoreData
 
+// MARK: - UI Helper Models
+
+// Helper struct to track add food context
+struct AddFoodContext: Identifiable {
+    let id = UUID()
+    let targetMeal: MealEntity?
+    let targetDate: Date
+}
+
 // MARK: - USDA API Models
 struct USDAFoodSearchResult: Decodable {
     let foods: [USDAFood]

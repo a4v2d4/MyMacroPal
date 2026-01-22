@@ -5,8 +5,7 @@ struct HomeView: View {
     @Environment(\.managedObjectContext) private var viewContext
     @EnvironmentObject private var mealLibrary: MealLibraryStore
     @StateObject private var viewModel: HomeViewModel
-    @State private var showAddFood = false
-    @State private var selectedMeal: MealEntity?
+    @State private var addFoodContext: AddFoodContext?
     @State private var mealToEdit: MealEntity?
     @State private var showMealCreate = false
     @FetchRequest private var todayMeals: FetchedResults<MealEntity>
@@ -118,8 +117,10 @@ struct HomeView: View {
                                 
                                 HStack(spacing: 16) {
                                     Button(action: {
-                                        selectedMeal = meal
-                                        showAddFood = true
+                                        addFoodContext = AddFoodContext(
+                                            targetMeal: meal,
+                                            targetDate: meal.date ?? Date()
+                                        )
                                     }) {
                                         Image(systemName: "plus")
                                     }
@@ -182,8 +183,10 @@ struct HomeView: View {
                 // Action buttons
                 VStack(spacing: 12) {
                     Button(action: { 
-                        selectedMeal = nil
-                        showAddFood = true 
+                        addFoodContext = AddFoodContext(
+                            targetMeal: nil,
+                            targetDate: Calendar.current.startOfDay(for: Date())
+                        )
                     }) {
                         HStack {
                             Image(systemName: "plus.circle.fill")
@@ -230,8 +233,8 @@ struct HomeView: View {
             }
             .navigationTitle("MyMacroPal")
             .navigationBarTitleDisplayMode(.large)
-            .sheet(isPresented: $showAddFood) {
-                AddFoodView(targetDate: Calendar.current.startOfDay(for: Date()), targetMeal: selectedMeal)
+            .sheet(item: $addFoodContext) { context in
+                AddFoodView(targetDate: context.targetDate, targetMeal: context.targetMeal)
                     .environment(\.managedObjectContext, viewContext)
             }
             .sheet(item: $mealToEdit) { meal in
